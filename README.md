@@ -14,7 +14,7 @@ NestJS
 
 ### Setup
 
-nestjs 폴더 생성
+**nestjs 폴더 생성**
 
 ```
 npm i -g @nestjs/cli
