@@ -33,6 +33,19 @@ nest g co name
 nest g service name
 ```
 
+**mongoose, config 설치**
+
+```
+npm i --save @nestjs/mongoose mongoose
+npm i --save @nestjs/config
+```
+
+**middleware 생성**
+
+```
+nest g middleware name
+```
+
 ### prettier/prettier rule
 
 ```
