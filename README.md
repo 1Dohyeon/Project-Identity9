@@ -24,3 +24,14 @@ nest new project-name
 ```
 npm i
 ```
+
+### prettier/prettier rule
+
+```
+'prettier/prettier': [
+    'error',
+    {
+        endOfLine: 'auto',
+    },
+],
+```
