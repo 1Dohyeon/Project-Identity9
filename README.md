@@ -25,6 +25,14 @@ nest new project-name
 npm i
 ```
 
+**module, controller, service 생성**
+
+```
+nest g mo name
+nest g co name
+nest g service name
+```
+
 ### prettier/prettier rule
 
 ```
