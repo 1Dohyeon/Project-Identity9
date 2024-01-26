@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LoggerMiddleware } from './common/logger/logger.middleware';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -17,13 +18,13 @@ import { UserModule } from './user/user.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
+export class AppModule implements NestModule {
   // production 배포시에는 false여야함.
   private readonly isDev: boolean = process.env.MODE === 'dev' ? true : false;
 
-  // (consumer: MiddlewareConsumer)
-  configure() {
-    // consumer.apply(LoggerMiddleware).forRoutes('*');
+  configure(consumer: MiddlewareConsumer) {
+    // 소비자에게 LoggerMiddleware 제공, 전체 엔드포인트에 대해서 LoggerMiddleware 실행
+    consumer.apply(LoggerMiddleware).forRoutes('*');
     mongoose.set('debug', this.isDev);
   }
 }
