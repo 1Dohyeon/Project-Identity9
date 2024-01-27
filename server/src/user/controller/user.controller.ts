@@ -32,15 +32,27 @@ export class UserController {
     return 'hello world';
   }
 
-  // 로그인 되어있는 user 정보 페이지 (마이페이지)
+  // 내 프로필 페이지
   @Get(':nickname')
   getCurrentUser() {
     return 'hello world';
   }
 
-  // 정보 수정 페이지
-  @Patch('edit')
+  // 프로필 수정 페이지
+  @Get(':nickname/edit')
+  editInfoPage() {
+    return 'hello world';
+  }
+
+  // 프로필 수정 후 프로필 페이지
+  @Patch(':nickname/edit')
   editInfo() {
+    return 'hello world';
+  }
+
+  // 로그아웃
+  @Post()
+  logout() {
     return 'hello world';
   }
 }
