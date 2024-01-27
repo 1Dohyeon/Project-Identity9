@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoggerMiddleware } from './common/logger/logger.middleware';
-import { UserModule } from './user/user.module';
+import { UserModule } from './users/users.module';
 
 @Module({
   imports: [

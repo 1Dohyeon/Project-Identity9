@@ -1,5 +1,6 @@
-import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { Document, SchemaOptions } from 'mongoose';
 
 const options: SchemaOptions = {
   timestamps: true,
