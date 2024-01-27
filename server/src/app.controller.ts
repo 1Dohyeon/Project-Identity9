@@ -5,8 +5,9 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  // 메인 페이지
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello() {
+    return 'hello world';
   }
 }
