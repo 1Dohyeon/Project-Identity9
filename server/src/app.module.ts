@@ -14,6 +14,7 @@ import { UserModule } from './user/user.module';
     }),
     UserModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
