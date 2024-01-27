@@ -46,6 +46,30 @@ npm i --save @nestjs/config
 nest g middleware name
 ```
 
+**class-validator 설치**
+
+```
+npm i --save class-validator class-transformer
+```
+
+**swagger 설치**
+
+```
+npm i --save @nestjs/swagger swagger-ui-express
+```
+
+**bcrypt 설치**
+
+```
+npm install bcrypt
+```
+
+적용
+
+```ts
+import * as bcrypt from "bcrypt";
+```
+
 ### prettier/prettier rule
 
 ```
