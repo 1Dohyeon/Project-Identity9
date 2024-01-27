@@ -7,8 +7,11 @@ import { UsersRepository } from '../users.repository';
 export class UserService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
+  // 회원가입
   async signUp(body: UserRequestDto) {
     const { email, password, name, nickname } = body;
+
+    // email 중복 확인
     const isUserExist = await this.usersRepository.existsByEmail(email);
 
     if (isUserExist) {
@@ -17,6 +20,7 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // user 데이터 생성
     const user = await this.usersRepository.create({
       email,
       password: hashedPassword,
