@@ -4,17 +4,18 @@ import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './common/logger/logger.middleware';
-import { UserModule } from './users/users.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UserModule,
+    UsersModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

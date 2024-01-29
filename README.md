@@ -70,6 +70,14 @@ npm install bcrypt
 import * as bcrypt from "bcrypt";
 ```
 
+**jwt passport 설치**
+
+```
+npm i --save @nestjs/passport passport
+npm i --save @nestjs/jwt passport-jwt
+npm i --save-dev @types/passport-jwt
+```
+
 ### prettier/prettier rule
 
 ```

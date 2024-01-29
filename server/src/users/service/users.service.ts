@@ -28,6 +28,6 @@ export class UserService {
       nickname,
     });
 
-    return user;
+    return user.readOnlyData;
   }
 }

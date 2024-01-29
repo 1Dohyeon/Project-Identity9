@@ -41,6 +41,23 @@ export class User extends Document {
   @Prop()
   @IsString()
   profileImgUrl: string;
+
+  readonly readOnlyData: {
+    id: string;
+    email: string;
+    name: string;
+    nickname: string;
+  };
 }
 
-export const CatSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
+
+// 필요한 데이터만 return
+UserSchema.virtual('readOnlyData').get(function (this: User) {
+  return {
+    id: this.id,
+    email: this.email,
+    name: this.name,
+    nickname: this.nickname,
+  };
+});
