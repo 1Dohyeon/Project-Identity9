@@ -43,4 +43,4 @@ export class User extends Document {
   profileImgUrl: string;
 }
 
-export const CatSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User);
