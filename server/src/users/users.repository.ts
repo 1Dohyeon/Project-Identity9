@@ -28,8 +28,16 @@ export class UsersRepository {
     return user;
   }
 
+  // email을 통해서 user를 찾아줌
   async findUserByEmail(email: string): Promise<User | null> {
+    // email 필드만 가진 객체
     const user = await this.userModel.findOne({ email });
     return user;
+  }
+
+  // Id를 통해서 passport 정보 없는 user 객체 반환(User의 readOnlyData 활용)
+  async getReadOnlyData(id: string) {
+    const user = await this.userModel.findById(id);
+    return user.readOnlyData;
   }
 }

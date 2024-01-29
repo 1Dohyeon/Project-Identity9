@@ -32,7 +32,10 @@ export class AuthService {
     }
 
     const payload = { email: email, sub: user.id };
+    const returnUser = await this.usersRepository.getReadOnlyData(user.id);
+
     return {
+      returnUser,
       token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }),
     };
   }
