@@ -7,6 +7,8 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthService } from 'src/auth/auth.service';
+import { LoginRequestDto } from 'src/auth/dtos/login.request.dto';
 import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { UserRequestDto } from '../dtos/users.request.dto';
@@ -17,7 +19,10 @@ import { UserService } from '../service/users.service';
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   // 회원가입 페이지
   @Get('signup')
@@ -26,7 +31,7 @@ export class UserController {
   }
 
   // 회원가입 후 로그인 페이지
-  @Post()
+  @Post('signup')
   async signUp(@Body() body: UserRequestDto) {
     return await this.userService.signUp(body);
   }
@@ -39,8 +44,8 @@ export class UserController {
 
   // 로그인 후 home 페이지
   @Post('login')
-  logIn() {
-    return 'hello world';
+  logIn(@Body() data: LoginRequestDto) {
+    return this.authService.jwtLogIn(data);
   }
 
   // 내 프로필 페이지
