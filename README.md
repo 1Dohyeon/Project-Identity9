@@ -82,6 +82,7 @@ npm i --save-dev @types/passport-jwt
 
 ```
 npm i react-router-dom
+npm i @mui/material @emotion/react @emotion/styled @mui/icons-material
 ```
 
 ### prettier/prettier rule
