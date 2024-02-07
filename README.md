@@ -81,7 +81,7 @@ npm i --save-dev @types/passport-jwt
 ### UI Setup
 
 ```
-npm i react-dom
+npm i react-router-dom
 ```
 
 ### prettier/prettier rule
