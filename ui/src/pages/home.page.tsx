@@ -1,5 +1,7 @@
+import AuthLayout from "../features/auth/auth.layout";
+
 const HomePage = () => {
-  return <div>home.page</div>;
+  return <AuthLayout>home.page</AuthLayout>;
 };
 
 export default HomePage;
