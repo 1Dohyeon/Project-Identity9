@@ -1,4 +1,4 @@
-import AuthLayout from "../features/auth/auth.layout";
+import AuthLayout from "../features/auth/components/auth.layout";
 import SignInComponent from "../features/auth/components/signin.form.component";
 
 const SignInPage = () => {
