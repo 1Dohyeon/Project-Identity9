@@ -1,10 +1,10 @@
 import AuthLayout from "../features/auth/auth.layout";
-import RegisterComponent from "../features/auth/components/registration.form.component";
+import SignInComponent from "../features/auth/components/signin.form.component";
 
 const SignInPage = () => {
   return (
     <AuthLayout>
-      <RegisterComponent />
+      <SignInComponent />
     </AuthLayout>
   );
 };
