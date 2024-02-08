@@ -13,6 +13,7 @@ import useInput from "../../../hooks/input/use.input";
 import { validateEmail } from "../../../shared/utils/validation/email";
 import {
   validateNameLength,
+  validateNickNameLength,
   validatePasswordLength,
 } from "../../../shared/utils/validation/length";
 import { NewUser } from "../models/newUser";
@@ -50,22 +51,35 @@ const RegisterComponent: FC = () => {
     clearHandler: confirmPasswordClearHandler,
   } = useInput(validatePasswordLength);
 
+  const {
+    text: nickName,
+    shouldDisplayError: nickNameHasError,
+    textChangeHandler: nickNameChangeHandler,
+    inputBlurHandler: nickNameBlurHandler,
+    clearHandler: nickNameClearHandler,
+  } = useInput(validateNickNameLength);
+
   const clearForm = () => {
     nameClearHandler();
     emailClearHandler();
     passwordClearHandler();
     confirmPasswordClearHandler();
+    nickNameClearHandler();
   };
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (password !== confirmPassword) return;
+
+    // 닉네임 중복 체크 해야됨
+
     if (
       nameHasError ||
       emailHasError ||
       passwordHasError ||
-      confirmPasswordHasError
+      confirmPasswordHasError ||
+      nickName
     )
       return;
 
@@ -73,7 +87,8 @@ const RegisterComponent: FC = () => {
       name.length === 0 ||
       email.length === 0 ||
       password.length === 0 ||
-      confirmPassword.length === 0
+      confirmPassword.length === 0 ||
+      nickName.length === 0
     )
       return;
 
@@ -81,6 +96,7 @@ const RegisterComponent: FC = () => {
       name,
       email,
       password,
+      nickName,
     };
 
     console.log("NEW USER: ", newUser);
@@ -181,6 +197,25 @@ const RegisterComponent: FC = () => {
             type="password"
             name="confirmPassword"
             id="confirmPassword"
+            variant="outlined"
+            size="small"
+          />
+
+          <InputLabel
+            sx={{ fontWeight: 600, marginTop: 1, color: "#000000" }}
+            htmlFor="confirm-password" // TextField's id
+          >
+            Your nickname
+          </InputLabel>
+          <TextField
+            value={nickName}
+            onChange={nickNameChangeHandler}
+            onBlur={nickNameBlurHandler}
+            error={nickNameHasError}
+            helperText={nickNameHasError ? "4 - 16 characters required" : ""}
+            type="text"
+            name="nickName"
+            id="nickName"
             variant="outlined"
             size="small"
           />
