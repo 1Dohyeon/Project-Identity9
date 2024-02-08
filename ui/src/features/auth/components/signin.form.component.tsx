@@ -9,11 +9,42 @@ import {
 } from "@mui/material";
 import { FC, FormEvent } from "react";
 import { Link } from "react-router-dom";
+import useInput from "../../../hooks/input/use.input";
+import { validateEmail } from "../../../shared/utils/validation/email";
+import { validatePasswordLength } from "../../../shared/utils/validation/length";
 
 const SignInComponent: FC = () => {
+  const {
+    text: email,
+    shouldDisplayError: emailHasError,
+    textChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailBlurHandler,
+    clearHandler: emailClearHandler,
+  } = useInput(validateEmail);
+
+  const {
+    text: password,
+    shouldDisplayError: passwordHasError,
+    textChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+    clearHandler: passwordClearHandler,
+  } = useInput(validatePasswordLength);
+
+  const clearForm = () => {
+    emailClearHandler();
+    passwordClearHandler();
+  };
+
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Clicked");
+
+    if (emailHasError || passwordHasError) return;
+
+    if (email.length === 0 || password.length === 0) return;
+
+    console.log("USER: ", email, ", ", password);
+
+    clearForm();
   };
 
   return (
@@ -41,6 +72,11 @@ const SignInComponent: FC = () => {
               Email
             </InputLabel>
             <TextField
+              value={email}
+              onChange={emailChangeHandler}
+              onBlur={emailBlurHandler}
+              error={emailHasError}
+              helperText={emailHasError ? "Enter your email" : ""}
               type="text"
               name="email"
               id="email"
@@ -55,12 +91,17 @@ const SignInComponent: FC = () => {
               Password
             </InputLabel>
             <TextField
+              value={password}
+              onChange={passwordChangeHandler}
+              onBlur={passwordBlurHandler}
+              error={passwordHasError}
+              helperText={passwordHasError ? "6 - 20 characters required" : ""}
               type="password"
               name="password"
               id="password"
               variant="outlined"
               size="small"
-              placeholder="Minimum 6 characters required"
+              placeholder="6 - 20 characters required"
             />
 
             <Button
