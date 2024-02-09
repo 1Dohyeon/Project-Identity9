@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { Document, SchemaOptions } from 'mongoose';
 import { ArticlesStatus } from './articles.status';
 
@@ -10,27 +10,15 @@ const options: SchemaOptions = {
 
 @Schema(options)
 export class Article extends Document {
-  // 게시글 id
-  @Prop({
-    required: true,
-    unique: true,
-  })
-  @IsEmail()
-  @IsNotEmpty()
-  id: string;
-
-  // 게시글 작성자 nickname
-  @Prop({
-    required: true,
-  })
+  // 게시글 작성자 id
+  @Prop()
   @IsString()
-  @IsNotEmpty()
-  @Length(6, 20)
-  author: string;
+  authorId: string;
 
   // 게시글 상태
   @Prop({
     required: true,
+    default: ArticlesStatus.PRIVATE,
   })
   @IsNotEmpty()
   status: ArticlesStatus;
@@ -44,12 +32,14 @@ export class Article extends Document {
   title: string;
 
   // 게시글 내용
-  @Prop()
+  @Prop({
+    required: true,
+  })
   @IsString()
   description: string;
 
   readonly readOnlyData: {
-    id: string;
+    authorId: string;
     author: string;
     status: ArticlesStatus;
     title: string;
@@ -63,7 +53,7 @@ export const ArticleSchema = SchemaFactory.createForClass(Article);
 ArticleSchema.virtual('readOnlyData').get(function (this: Article) {
   return {
     id: this.id,
-    author: this.author,
+    authorId: this.authorId,
     status: this.status,
     title: this.title,
   };
