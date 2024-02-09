@@ -29,7 +29,7 @@ export class UsersRepository {
     return await this.userModel.create(user);
   }
 
-  // Id를 통해서 passport 정보 없는 user 객체 반환
+  // Id를 통해서 password 정보 없는 user 객체 반환
   async findUserByIdWithoutPassword(userId: string): Promise<User | null> {
     const user = await this.userModel.findById(userId).select('-password');
     return user;
