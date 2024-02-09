@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 import { Document, SchemaOptions } from 'mongoose';
 
 const options: SchemaOptions = {
@@ -21,6 +21,7 @@ export class User extends Document {
   })
   @IsString()
   @IsNotEmpty()
+  @Length(6, 20)
   password: string;
 
   @Prop({
@@ -28,6 +29,7 @@ export class User extends Document {
   })
   @IsString()
   @IsNotEmpty()
+  @Length(2, 20)
   name: string;
 
   @Prop({
@@ -36,6 +38,7 @@ export class User extends Document {
   })
   @IsString()
   @IsNotEmpty()
+  @Length(4, 16)
   nickname: string;
 
   @Prop()

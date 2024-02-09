@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Patch,
@@ -7,11 +6,9 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
-import { LoginRequestDto } from 'src/auth/dtos/login.request.dto';
+import { AuthService } from 'src/auth/service/auth.service';
 import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { UserRequestDto } from '../dtos/users.request.dto';
 import { UserService } from '../service/users.service';
 
 // 글로벌 설정 말고 데코레이터로 각 컨트롤러마다 설정 가능
@@ -30,22 +27,10 @@ export class UserController {
     return 'hello world';
   }
 
-  // 회원가입 후 로그인 페이지
-  @Post('signup')
-  async signUp(@Body() body: UserRequestDto) {
-    return await this.userService.signUp(body);
-  }
-
   // 로그인 페이지
   @Get('login')
   loginPage() {
     return 'hello world';
-  }
-
-  // 로그인 후 home 페이지
-  @Post('login')
-  logIn(@Body() data: LoginRequestDto) {
-    return this.authService.jwtLogIn(data);
   }
 
   // 내 프로필 페이지

@@ -17,6 +17,13 @@ export class UsersRepository {
     else return false;
   }
 
+  // nickname 중복 확인
+  async existsByNickname(nickname: string): Promise<boolean> {
+    const result = await this.userModel.exists({ nickname });
+    if (result) return true;
+    else return false;
+  }
+
   // user 데이터 생성
   async create(user: UserRequestDto): Promise<User> {
     return await this.userModel.create(user);
