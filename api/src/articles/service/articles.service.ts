@@ -6,8 +6,12 @@ import { Article } from '../articles.schema';
 export class ArticlesService {
   constructor(private readonly articleRepository: ArticleRepository) {}
 
-  async create(createArticleDto: any, userId: string): Promise<Article> {
-    return this.articleRepository.create(createArticleDto, userId);
+  async create(createArticleDto: any, userId: string) {
+    const newArticle = await this.articleRepository.create(
+      createArticleDto,
+      userId,
+    );
+    return newArticle.readOnlyData;
   }
 
   async findAll(): Promise<Article[]> {

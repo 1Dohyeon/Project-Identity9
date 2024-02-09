@@ -40,10 +40,8 @@ export class Article extends Document {
 
   readonly readOnlyData: {
     authorId: string;
-    author: string;
     status: ArticlesStatus;
     title: string;
-    description: string;
   };
 }
 
@@ -52,7 +50,6 @@ export const ArticleSchema = SchemaFactory.createForClass(Article);
 // 필요한 데이터만 return
 ArticleSchema.virtual('readOnlyData').get(function (this: Article) {
   return {
-    id: this.id,
     authorId: this.authorId,
     status: this.status,
     title: this.title,
