@@ -22,14 +22,14 @@ export class UserController {
   ) {}
 
   // 회원가입 페이지
-  @Get('signup')
-  signUpPage() {
+  @Get('register')
+  registerPage() {
     return 'hello world';
   }
 
   // 로그인 페이지
-  @Get('login')
-  loginPage() {
+  @Get('signin')
+  signInPage() {
     return 'hello world';
   }
 

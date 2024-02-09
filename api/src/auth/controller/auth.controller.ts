@@ -8,13 +8,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   // 회원가입 후 로그인 페이지
-  @Post('/signup')
+  @Post('/register')
   async signUp(@Body() body: SignupRequestDto) {
     return await this.authService.signUp(body);
   }
 
   // 로그인 후 home 페이지
-  @Post('login')
+  @Post('signin')
   logIn(@Body() data: LoginRequestDto) {
     return this.authService.jwtLogIn(data);
   }
