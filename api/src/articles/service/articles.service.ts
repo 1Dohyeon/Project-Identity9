@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { ArticleRepository } from '../articles.repository';
 import { Article } from '../articles.schema';
+import { CreateArticleDto } from '../dtos/createArticle.dto';
 
 @Injectable()
 export class ArticlesService {
   constructor(private readonly articleRepository: ArticleRepository) {}
 
-  async create(createArticleDto: any, userId: string) {
+  async create(createArticleDto: CreateArticleDto, userId: string) {
     const newArticle = await this.articleRepository.create(
       createArticleDto,
       userId,
