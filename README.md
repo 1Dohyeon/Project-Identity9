@@ -12,7 +12,7 @@ Typescript
 
 NestJS
 
-### Setup
+### API Setup
 
 **nestjs 폴더 생성**
 
@@ -76,6 +76,13 @@ import * as bcrypt from "bcrypt";
 npm i --save @nestjs/passport passport
 npm i --save @nestjs/jwt passport-jwt
 npm i --save-dev @types/passport-jwt
+```
+
+### UI Setup
+
+```
+npm i react-router-dom
+npm i @mui/material @emotion/react @emotion/styled @mui/icons-material
 ```
 
 ### prettier/prettier rule
