@@ -22,7 +22,6 @@ export class AuthService {
     if (isEmailExist) {
       throw new UnauthorizedException('이미 존재하는 이메일입니다.');
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     // 닉네임 중복 확인
     const isNicknameExist =
@@ -32,6 +31,8 @@ export class AuthService {
     }
 
     // user 데이터 생성
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await this.usersRepository.create({
       email,
       password: hashedPassword,
