@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserRequestDto } from './dtos/users.request.dto';
+import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { User } from './users.schema';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class UsersRepository {
   }
 
   // user 데이터 생성
-  async create(user: UserRequestDto): Promise<User> {
+  async create(user: SignupRequestDto): Promise<User> {
     return await this.userModel.create(user);
   }
 

@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 import { Document, SchemaOptions } from 'mongoose';
 
+// createdAt, updatedAt field
 const options: SchemaOptions = {
   timestamps: true,
 };
