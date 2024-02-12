@@ -23,7 +23,13 @@ export class ArticleRepository {
   async update(id: string, updateArticleDto: UpdateArticleDto) {
     const article = await this.articleModel
       .findByIdAndUpdate(id, updateArticleDto, { new: true })
-      .exec();
+      .exec(); // .exec() 메소드는 쿼리를 실행하고, 프로미스(Promise)를 반환하기 위해 사용됨.
+    return article.readOnlyData;
+  }
+
+  // 게시물 삭제
+  async delete(id: string) {
+    const article = await this.articleModel.findByIdAndDelete(id).exec();
     return article.readOnlyData;
   }
 

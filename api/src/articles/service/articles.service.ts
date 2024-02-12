@@ -17,6 +17,10 @@ export class ArticlesService {
     return this.articleRepository.update(id, updateArticleDto);
   }
 
+  async delete(id: string) {
+    return this.articleRepository.delete(id);
+  }
+
   async findAll(): Promise<Article[]> {
     return this.articleRepository.findAll();
   }

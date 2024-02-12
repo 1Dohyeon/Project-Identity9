@@ -59,8 +59,10 @@ export class ArticlesController {
     return this.articlesService.update(id, updateArticleDto);
   }
 
+  // 게시물 삭제
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  deleteArticle() {
-    return 'hello world';
+  deleteArticle(@Param('id') id: string) {
+    return this.articlesService.delete(id);
   }
 }
