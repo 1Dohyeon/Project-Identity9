@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
   IsNumber,
@@ -90,6 +91,11 @@ export class User extends Document {
   @IsNumber()
   allArticlesCount: number;
 
+  // 사용자 게시물 id
+  @Prop()
+  @IsArray()
+  articlesId: [];
+
   readonly readOnlyData: {
     id: string;
     email: string;
@@ -103,6 +109,7 @@ export class User extends Document {
     name: string;
     nickname: string;
     articles: {
+      articlesId: [];
       pageArticlesCount: number;
       allArticlesCount: number;
       publicArticlesCount: number;
@@ -120,5 +127,21 @@ UserSchema.virtual('readOnlyData').get(function (this: User) {
     email: this.email,
     name: this.name,
     nickname: this.nickname,
+  };
+});
+
+UserSchema.virtual('readOnlyDataWithArticles').get(function (this: User) {
+  return {
+    id: this.id,
+    email: this.email,
+    name: this.name,
+    nickname: this.nickname,
+    articles: {
+      articlesId: this.articlesId,
+      pageArticlesCount: this.pageArticlesCount,
+      allArticlesCount: this.allArticlesCount,
+      publicArticlesCount: this.publicArticlesCount,
+      privateArticlesCount: this.privateArticlesCount,
+    },
   };
 });

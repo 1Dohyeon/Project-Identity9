@@ -53,7 +53,7 @@ export class UsersRepository {
   // nickname을 통해서 user를 찾아줌
   async getCurrentUser(nickname: string): Promise<any | null> {
     const user = await this.userModel.findOne({ nickname });
-    return user.readOnlyData;
+    return user.readOnlyDataWithArticles;
   }
 
   // email을 통해서 user를 찾아줌(readOnlyData 사용하면 안됨..)
