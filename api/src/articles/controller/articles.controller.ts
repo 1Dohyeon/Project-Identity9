@@ -18,19 +18,19 @@ import { ArticlesService } from '../service/articles.service';
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
-  // 전체 게시물 보여줌
+  // show all articles
   @Get()
   getArticlesPage() {
     return this.articlesService.findAll();
   }
 
-  // 특정 게시물 보여줌
+  // show (article)id's article
   @Get(':id')
   getOneArticle(@Param('id') id: string) {
     return this.articlesService.findOne(id);
   }
 
-  // 게시물 만들어줌
+  // create new article
   @UseGuards(JwtAuthGuard)
   @Post()
   async createArticle(@Request() req: any) {
@@ -43,13 +43,13 @@ export class ArticlesController {
     return await this.articlesService.create(defaultArticleData);
   }
 
-  // 게시물 작성 페이지
+  // show page that you can write
   @Get(':id/write')
   updateArticlePage(@Param('id') id: string) {
     return this.articlesService.findOne(id);
   }
 
-  // 게시물 업데이트
+  // update (article)id's article
   @UseGuards(JwtAuthGuard)
   @Patch(':id/write')
   updateArticle(
@@ -59,7 +59,7 @@ export class ArticlesController {
     return this.articlesService.update(id, updateArticleDto);
   }
 
-  // 게시물 삭제
+  // delete (article)id's article
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   deleteArticle(@Param('id') id: string) {

@@ -11,7 +11,7 @@ export class ArticleRepository {
     @InjectModel(Article.name) private readonly articleModel: Model<Article>,
   ) {}
 
-  // 새 게시물 생성
+  // create new article
   async create(createArticleDto: CreateArticleDto): Promise<Article> {
     const newArticle = new this.articleModel({
       ...createArticleDto,
@@ -19,7 +19,7 @@ export class ArticleRepository {
     return newArticle.save();
   }
 
-  // 게시물 업데이트
+  // update article
   async update(id: string, updateArticleDto: UpdateArticleDto) {
     const article = await this.articleModel
       .findByIdAndUpdate(id, updateArticleDto, { new: true })
@@ -27,7 +27,7 @@ export class ArticleRepository {
     return article.readOnlyData;
   }
 
-  // 게시물 삭제
+  // delete article
   async delete(id: string) {
     const article = await this.articleModel.findByIdAndDelete(id).exec();
     return article.readOnlyData;
