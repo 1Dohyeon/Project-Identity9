@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -10,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { ArticlesStatus } from '../articles.status';
+import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 import { ArticlesService } from '../service/articles.service';
 
 @Controller('articles')
@@ -48,9 +50,13 @@ export class ArticlesController {
   }
 
   // 게시물 업데이트
+  @UseGuards(JwtAuthGuard)
   @Patch(':id/write')
-  updateArticle() {
-    return 'hello world';
+  updateArticle(
+    @Param('id') id: string,
+    @Body() updateArticleDto: UpdateArticleDto,
+  ) {
+    return this.articlesService.update(id, updateArticleDto);
   }
 
   @Delete(':id')

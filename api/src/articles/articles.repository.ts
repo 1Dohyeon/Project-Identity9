@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Article } from './articles.schema';
 import { CreateArticleDto } from './dtos/createArticle.dto';
+import { UpdateArticleDto } from './dtos/updateArticle.dto';
 
 @Injectable()
 export class ArticleRepository {
@@ -10,11 +11,20 @@ export class ArticleRepository {
     @InjectModel(Article.name) private readonly articleModel: Model<Article>,
   ) {}
 
+  // 새 게시물 생성
   async create(createArticleDto: CreateArticleDto): Promise<Article> {
     const newArticle = new this.articleModel({
       ...createArticleDto,
     });
     return newArticle.save();
+  }
+
+  // 게시물 업데이트
+  async update(id: string, updateArticleDto: UpdateArticleDto) {
+    const article = await this.articleModel
+      .findByIdAndUpdate(id, updateArticleDto, { new: true })
+      .exec();
+    return article.readOnlyData;
   }
 
   // Mongoose에서 직접적으로 가상 필드를 쿼리 결과에 포함시키는 것은 지원하지 않기 때문에,

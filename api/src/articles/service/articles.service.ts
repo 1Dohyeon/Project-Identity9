@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ArticleRepository } from '../articles.repository';
 import { Article } from '../articles.schema';
 import { CreateArticleDto } from '../dtos/createArticle.dto';
+import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -10,6 +11,10 @@ export class ArticlesService {
   async create(createArticleDto: CreateArticleDto) {
     const newArticle = await this.articleRepository.create(createArticleDto);
     return newArticle.readOnlyData;
+  }
+
+  async update(id: string, updateArticleDto: UpdateArticleDto) {
+    return this.articleRepository.update(id, updateArticleDto);
   }
 
   async findAll(): Promise<Article[]> {
