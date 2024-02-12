@@ -76,4 +76,13 @@ export class UsersRepository {
 
     return user.readOnlyDataWithArticles;
   }
+
+  async minusPrivateArticle(id: string): Promise<any | null> {
+    const user = await this.userModel.findById(id);
+
+    user.privateArticlesCount -= 1;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
+  }
 }

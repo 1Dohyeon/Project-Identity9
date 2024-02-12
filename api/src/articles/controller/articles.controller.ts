@@ -69,7 +69,10 @@ export class ArticlesController {
   // delete (article)id's article
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  deleteArticle(@Param('id') id: string) {
-    return this.articlesService.delete(id);
+  async deleteArticle(@Param('id') id: string, @Request() req: any) {
+    return (
+      await this.articlesService.delete(id),
+      await this.userService.minusPrivateArticle(req.user.id)
+    );
   }
 }

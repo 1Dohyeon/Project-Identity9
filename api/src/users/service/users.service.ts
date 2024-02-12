@@ -21,4 +21,8 @@ export class UserService {
   async plusPrivateArticle(id: string) {
     return this.usersRepository.plusPrivateArticle(id);
   }
+
+  async minusPrivateArticle(id: string) {
+    return this.usersRepository.minusPrivateArticle(id);
+  }
 }
