@@ -14,7 +14,7 @@ export class AuthController {
   }
 
   // 회원가입 후 로그인 페이지
-  @Post('/register')
+  @Post('register')
   async signUp(@Body() body: SignupRequestDto) {
     return await this.authService.signUp(body);
   }

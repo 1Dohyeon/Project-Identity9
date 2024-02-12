@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
+import { UpdateUserDto } from './dtos/updateUser.dto';
 import { User } from './users.schema';
 
 @Injectable()
@@ -9,6 +10,20 @@ export class UsersRepository {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
+
+  // 계정 삭제
+  async deleteUser(id) {
+    const user = await this.userModel.findByIdAndDelete(id).exec();
+    return user.readOnlyData;
+  }
+
+  // 마이페이지 업데이트
+  async updateInfo(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.userModel
+      .findByIdAndUpdate(id, updateUserDto, { new: true })
+      .exec(); // .exec() 메소드는 쿼리를 실행하고, 프로미스(Promise)를 반환하기 위해 사용됨.
+    return user.readOnlyData;
+  }
 
   // email 중복 확인
   async existsByEmail(email: string): Promise<boolean> {
@@ -30,20 +45,25 @@ export class UsersRepository {
   }
 
   // Id를 통해서 password 정보 없는 user 객체 반환
-  async findUserByIdWithoutPassword(userId: string): Promise<User | null> {
+  async findUserByIdWithoutPassword(userId: string): Promise<any | null> {
     const user = await this.userModel.findById(userId).select('-password');
-    return user;
+    return user.readOnlyData;
   }
 
-  // email을 통해서 user를 찾아줌
-  async findUserByEmail(email: string): Promise<User | null> {
-    // email 필드만 가진 객체
+  // nickname을 통해서 user를 찾아줌
+  async getCurrentUser(nickname: string): Promise<any | null> {
+    const user = await this.userModel.findOne({ nickname });
+    return user.readOnlyData;
+  }
+
+  // email을 통해서 user를 찾아줌(readOnlyData 사용하면 안됨..)
+  async findUserByEmail(email: string): Promise<any | null> {
     const user = await this.userModel.findOne({ email });
     return user;
   }
 
   // Id를 통해서 passport 정보 없는 user 객체 반환(User의 readOnlyData 활용)
-  async getReadOnlyData(id: string) {
+  async getReadOnlyData(id: string): Promise<any | null> {
     const user = await this.userModel.findById(id);
     return user.readOnlyData;
   }
