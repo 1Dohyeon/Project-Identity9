@@ -21,18 +21,6 @@ export class UserController {
     private readonly authService: AuthService,
   ) {}
 
-  // 회원가입 페이지
-  @Get('register')
-  registerPage() {
-    return 'hello world';
-  }
-
-  // 로그인 페이지
-  @Get('signin')
-  signInPage() {
-    return 'hello world';
-  }
-
   // 내 프로필 페이지
   @Get(':nickname')
   getCurrentUser() {
