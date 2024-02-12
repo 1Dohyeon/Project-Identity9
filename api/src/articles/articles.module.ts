@@ -10,12 +10,11 @@ import { ArticlesService } from './service/articles.service';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }]),
-    forwardRef(() => AuthModule),
-
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
+    forwardRef(() => AuthModule),
   ],
   controllers: [ArticlesController],
   providers: [ArticlesService, ArticleRepository],

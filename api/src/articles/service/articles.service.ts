@@ -7,11 +7,8 @@ import { CreateArticleDto } from '../dtos/createArticle.dto';
 export class ArticlesService {
   constructor(private readonly articleRepository: ArticleRepository) {}
 
-  async create(createArticleDto: CreateArticleDto, userId: string) {
-    const newArticle = await this.articleRepository.create(
-      createArticleDto,
-      userId,
-    );
+  async create(createArticleDto: CreateArticleDto) {
+    const newArticle = await this.articleRepository.create(createArticleDto);
     return newArticle.readOnlyData;
   }
 
@@ -19,7 +16,7 @@ export class ArticlesService {
     return this.articleRepository.findAll();
   }
 
-  async findOne(id: string): Promise<Article | null> {
+  async findOne(id: string) {
     return this.articleRepository.findOne(id);
   }
 }
