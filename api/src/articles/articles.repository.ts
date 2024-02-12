@@ -12,7 +12,7 @@ export class ArticleRepository {
   ) {}
 
   // create new article
-  async create(createArticleDto: CreateArticleDto): Promise<Article> {
+  async create(createArticleDto: CreateArticleDto): Promise<any | null> {
     const newArticle = new this.articleModel({
       ...createArticleDto,
     });

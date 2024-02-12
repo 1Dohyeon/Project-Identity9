@@ -12,7 +12,7 @@ export class UsersRepository {
   ) {}
 
   // 계정 삭제
-  async deleteUser(id) {
+  async deleteUser(id: string) {
     const user = await this.userModel.findByIdAndDelete(id).exec();
     return user.readOnlyData;
   }
@@ -66,5 +66,14 @@ export class UsersRepository {
   async getReadOnlyData(id: string): Promise<any | null> {
     const user = await this.userModel.findById(id);
     return user.readOnlyData;
+  }
+
+  async plusPrivateArticle(id: string): Promise<any | null> {
+    const user = await this.userModel.findById(id);
+
+    user.privateArticlesCount += 1;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
   }
 }

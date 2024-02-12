@@ -17,4 +17,8 @@ export class UserService {
   async deleteUser(id: string) {
     return this.usersRepository.deleteUser(id);
   }
+
+  async plusPrivateArticle(id: string) {
+    return this.usersRepository.plusPrivateArticle(id);
+  }
 }

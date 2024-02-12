@@ -10,13 +10,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
+import { UserService } from 'src/users/service/users.service';
 import { ArticlesStatus } from '../articles.status';
 import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 import { ArticlesService } from '../service/articles.service';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(private readonly articlesService: ArticlesService) {}
+  constructor(
+    private readonly articlesService: ArticlesService,
+    private userService: UserService,
+  ) {}
 
   // show all articles
   @Get()
@@ -40,7 +44,10 @@ export class ArticlesController {
       title: 'New Article',
       description: 'Default content',
     };
-    return await this.articlesService.create(defaultArticleData);
+    return (
+      await this.articlesService.create(defaultArticleData),
+      await this.userService.plusPrivateArticle(req.user.id)
+    );
   }
 
   // show page that you can write
