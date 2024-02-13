@@ -13,8 +13,10 @@ export class ArticlesService {
   constructor(
     private moduleRef: ModuleRef,
     private readonly articleRepository: ArticleRepository,
-  ) {
-    // ModuleRef를 사용하여 UserService 인스턴스를 늦게 가져옴
+  ) {}
+
+  onModuleInit() {
+    // onModuleInit 생명주기 훅을 사용하여 userService 인스턴스를 늦게 가져옴.
     this.userService = this.moduleRef.get(UserService, { strict: false });
   }
 
