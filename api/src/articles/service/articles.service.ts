@@ -33,4 +33,8 @@ export class ArticlesService {
   async findOne(id: string) {
     return this.articleRepository.findOne(id);
   }
+
+  async findArticlesIdByAuthorId(authorId: string) {
+    return this.articleRepository.findArticlesIdByAuthorId(authorId);
+  }
 }

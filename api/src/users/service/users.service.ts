@@ -25,4 +25,12 @@ export class UserService {
   async minusPrivateArticle(id: string) {
     return this.usersRepository.minusPrivateArticle(id);
   }
+
+  async updateArticlesId(id: string, articlesId: string[]) {
+    return this.usersRepository.updateArticlesId(id, articlesId);
+  }
+
+  async updateAllArticles(id: string) {
+    return this.usersRepository.updateAllArticles(id);
+  }
 }

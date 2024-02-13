@@ -44,10 +44,17 @@ export class ArticlesController {
       title: 'New Article',
       description: 'Default content',
     };
-    return (
-      await this.articlesService.create(defaultArticleData),
-      await this.userService.plusPrivateArticle(req.user.id)
+
+    const newArticle = this.articlesService.create(defaultArticleData);
+    const newArticlesId = await this.articlesService.findArticlesIdByAuthorId(
+      req.user.id,
     );
+
+    await this.userService.updateArticlesId(req.user.id, newArticlesId);
+    await this.userService.plusPrivateArticle(req.user.id);
+    await this.userService.updateAllArticles(req.user.id);
+
+    return await newArticle;
   }
 
   // show page that you can write
@@ -72,7 +79,8 @@ export class ArticlesController {
   async deleteArticle(@Param('id') id: string, @Request() req: any) {
     return (
       await this.articlesService.delete(id),
-      await this.userService.minusPrivateArticle(req.user.id)
+      await this.userService.minusPrivateArticle(req.user.id),
+      await this.userService.updateAllArticles(req.user.id)
     );
   }
 }

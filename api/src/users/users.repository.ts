@@ -85,4 +85,21 @@ export class UsersRepository {
 
     return user.readOnlyDataWithArticles;
   }
+
+  async updateArticlesId(id: string, articlesId: string[]) {
+    const user = await this.userModel.findById(id);
+    user.articlesId = articlesId;
+    await user.save();
+
+    return user.articlesId;
+  }
+
+  async updateAllArticles(id: string) {
+    const user = await this.userModel.findById(id);
+    user.allArticlesCount =
+      user.privateArticlesCount + user.publicArticlesCount;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
+  }
 }

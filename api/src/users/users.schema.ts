@@ -92,9 +92,9 @@ export class User extends Document {
   allArticlesCount: number;
 
   // 사용자 게시물 id
-  @Prop()
+  @Prop({ ref: 'Article' })
   @IsArray()
-  articlesId: [];
+  articlesId: string[];
 
   readonly readOnlyData: {
     id: string;
@@ -109,18 +109,18 @@ export class User extends Document {
     name: string;
     nickname: string;
     articles: {
-      articlesId: [];
+      articlesId: string[];
       pageArticlesCount: number;
-      allArticlesCount: number;
       publicArticlesCount: number;
       privateArticlesCount: number;
+      allArticlesCount: number;
     };
   };
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// 필요한 데이터만 return
+// user 정보만
 UserSchema.virtual('readOnlyData').get(function (this: User) {
   return {
     id: this.id,
@@ -130,6 +130,7 @@ UserSchema.virtual('readOnlyData').get(function (this: User) {
   };
 });
 
+// user와 user의 article 관련 정보들
 UserSchema.virtual('readOnlyDataWithArticles').get(function (this: User) {
   return {
     id: this.id,
