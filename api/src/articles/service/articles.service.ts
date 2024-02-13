@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ModuleRef } from '@nestjs/core';
 import { UserService } from 'src/users/service/users.service';
 import { ArticleRepository } from '../articles.repository';
 import { Article } from '../articles.schema';
@@ -7,10 +8,15 @@ import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 
 @Injectable()
 export class ArticlesService {
+  private userService: UserService;
+
   constructor(
+    private moduleRef: ModuleRef,
     private readonly articleRepository: ArticleRepository,
-    private userService: UserService,
-  ) {}
+  ) {
+    // ModuleRef를 사용하여 UserService 인스턴스를 늦게 가져옴
+    this.userService = this.moduleRef.get(UserService, { strict: false });
+  }
 
   // create new article
   async create(createArticleDto: CreateArticleDto, userId: string) {
@@ -35,6 +41,10 @@ export class ArticlesService {
     const deleteArticle = await this.articleRepository.delete(articleId);
 
     return deleteArticle;
+  }
+
+  async deleteAll(userId: string) {
+    return this.articleRepository.deleteAll(userId);
   }
 
   // show all articles

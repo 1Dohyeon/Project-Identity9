@@ -52,4 +52,8 @@ export class ArticleRepository {
     const articlesId = articles.map((article) => article._id.toString()); // 각 게시글의 ID를 문자열로 변환하여 배열 생성
     return articlesId;
   }
+
+  async deleteAll(userId: string) {
+    return await this.articleModel.deleteMany({ authorId: userId });
+  }
 }

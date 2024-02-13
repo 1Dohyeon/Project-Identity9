@@ -12,8 +12,8 @@ export class UsersRepository {
   ) {}
 
   // 계정 삭제
-  async deleteUser(id: string) {
-    const user = await this.userModel.findByIdAndDelete(id).exec();
+  async deleteUser(userId: string) {
+    const user = await this.userModel.findByIdAndDelete(userId).exec();
     return user.readOnlyData;
   }
 

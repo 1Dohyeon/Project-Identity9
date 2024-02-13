@@ -16,7 +16,7 @@ import { ArticlesService } from './service/articles.service';
       signOptions: { expiresIn: '1d' },
     }),
     forwardRef(() => AuthModule),
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
   controllers: [ArticlesController],
   providers: [ArticlesService, ArticleRepository],

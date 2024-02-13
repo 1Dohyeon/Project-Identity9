@@ -1,5 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ArticlesModule } from 'src/articles/articles.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { UserController } from './controller/users.controller';
 import { UserService } from './service/users.service';
@@ -12,6 +13,7 @@ import { User, UserSchema } from './users.schema';
 
     // 순환 모듈 문제 해결을 위해서 forwardRef 사용
     forwardRef(() => AuthModule),
+    forwardRef(() => ArticlesModule),
   ],
   controllers: [UserController],
   providers: [UserService, UsersRepository],
