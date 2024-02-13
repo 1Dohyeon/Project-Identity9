@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { User } from './users.schema';
@@ -86,14 +86,6 @@ export class UsersRepository {
     return user.readOnlyDataWithArticles;
   }
 
-  async updateArticlesId(id: string, articlesId: string[]) {
-    const user = await this.userModel.findById(id);
-    user.articlesId = articlesId;
-    await user.save();
-
-    return user.articlesId;
-  }
-
   async updateAllArticles(id: string) {
     const user = await this.userModel.findById(id);
     user.allArticlesCount =
@@ -101,5 +93,28 @@ export class UsersRepository {
     await user.save();
 
     return user.readOnlyDataWithArticles;
+  }
+
+  async addArticleToUser(userId: string, articleId: string): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $push: { articlesId: new Types.ObjectId(articleId) } },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async removeArticleFromUser(
+    userId: string,
+    articleId: string,
+  ): Promise<User> {
+    return await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $pull: { articlesId: new Types.ObjectId(articleId) } },
+        { new: true },
+      )
+      .exec();
   }
 }

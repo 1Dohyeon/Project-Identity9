@@ -10,17 +10,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { UserService } from 'src/users/service/users.service';
 import { ArticlesStatus } from '../articles.status';
 import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 import { ArticlesService } from '../service/articles.service';
 
 @Controller('articles')
 export class ArticlesController {
-  constructor(
-    private readonly articlesService: ArticlesService,
-    private userService: UserService,
-  ) {}
+  constructor(private readonly articlesService: ArticlesService) {}
 
   // show all articles
   @Get()
@@ -38,23 +34,17 @@ export class ArticlesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createArticle(@Request() req: any) {
-    const defaultArticleData = {
-      authorId: req.user.id,
-      status: ArticlesStatus.PRIVATE,
-      title: 'New Article',
-      description: 'Default content',
-    };
-
-    const newArticle = this.articlesService.create(defaultArticleData);
-    const newArticlesId = await this.articlesService.findArticlesIdByAuthorId(
+    const newArticle = this.articlesService.create(
+      {
+        authorId: req.user.id,
+        status: ArticlesStatus.PRIVATE,
+        title: 'New Article',
+        description: 'Default content',
+      },
       req.user.id,
     );
 
-    await this.userService.updateArticlesId(req.user.id, newArticlesId);
-    await this.userService.plusPrivateArticle(req.user.id);
-    await this.userService.updateAllArticles(req.user.id);
-
-    return await newArticle;
+    return newArticle;
   }
 
   // show page that you can write
@@ -76,11 +66,8 @@ export class ArticlesController {
   // delete (article)id's article
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteArticle(@Param('id') id: string, @Request() req: any) {
-    return (
-      await this.articlesService.delete(id),
-      await this.userService.minusPrivateArticle(req.user.id),
-      await this.userService.updateAllArticles(req.user.id)
-    );
+  async deleteArticle(@Param('id') articleId: string, @Request() req: any) {
+    const deleteArticle = this.articlesService.delete(articleId, req.user.id);
+    return deleteArticle;
   }
 }

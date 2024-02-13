@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UserService } from 'src/users/service/users.service';
 import { ArticleRepository } from '../articles.repository';
 import { Article } from '../articles.schema';
 import { CreateArticleDto } from '../dtos/createArticle.dto';
@@ -6,11 +7,18 @@ import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 
 @Injectable()
 export class ArticlesService {
-  constructor(private readonly articleRepository: ArticleRepository) {}
+  constructor(
+    private readonly articleRepository: ArticleRepository,
+    private userService: UserService,
+  ) {}
 
   // create new article
-  async create(createArticleDto: CreateArticleDto) {
+  async create(createArticleDto: CreateArticleDto, userId: string) {
     const newArticle = await this.articleRepository.create(createArticleDto);
+    await this.userService.addArticleToUser(userId, newArticle._id); // User에 Article ID 추가
+    await this.userService.plusPrivateArticle(userId);
+    await this.userService.updateAllArticles(userId);
+
     return newArticle.readOnlyData;
   }
 
@@ -20,8 +28,13 @@ export class ArticlesService {
   }
 
   // delete (article)id's article
-  async delete(id: string) {
-    return this.articleRepository.delete(id);
+  async delete(articleId: string, userId: string) {
+    await this.userService.removeArticleFromUser(userId, articleId); // User에 Article ID 삭제
+    await this.userService.minusPrivateArticle(userId);
+    await this.userService.updateAllArticles(userId);
+    const deleteArticle = await this.articleRepository.delete(articleId);
+
+    return deleteArticle;
   }
 
   // show all articles

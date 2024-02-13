@@ -7,7 +7,7 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { Document, SchemaOptions } from 'mongoose';
+import { Document, SchemaOptions, Types } from 'mongoose';
 
 // createdAt, updatedAt field
 const options: SchemaOptions = {
@@ -92,9 +92,9 @@ export class User extends Document {
   allArticlesCount: number;
 
   // 사용자 게시물 id
-  @Prop({ ref: 'Article' })
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Article' }] })
   @IsArray()
-  articlesId: string[];
+  articlesId: Types.ObjectId[];
 
   readonly readOnlyData: {
     id: string;
@@ -109,7 +109,7 @@ export class User extends Document {
     name: string;
     nickname: string;
     articles: {
-      articlesId: string[];
+      articlesId: Types.ObjectId[];
       pageArticlesCount: number;
       publicArticlesCount: number;
       privateArticlesCount: number;
@@ -119,6 +119,10 @@ export class User extends Document {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+// Virtuals 포함 설정
+UserSchema.set('toJSON', { virtuals: true });
+UserSchema.set('toObject', { virtuals: true });
 
 // user 정보만
 UserSchema.virtual('readOnlyData').get(function (this: User) {

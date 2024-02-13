@@ -28,8 +28,8 @@ export class ArticleRepository {
   }
 
   // delete article
-  async delete(id: string) {
-    const article = await this.articleModel.findByIdAndDelete(id).exec();
+  async delete(articleId: string) {
+    const article = await this.articleModel.findByIdAndDelete(articleId).exec();
     return article.readOnlyData;
   }
 

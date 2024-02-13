@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { UsersRepository } from '../users.repository';
+import { User } from '../users.schema';
 
 @Injectable()
 export class UserService {
@@ -26,11 +27,18 @@ export class UserService {
     return this.usersRepository.minusPrivateArticle(id);
   }
 
-  async updateArticlesId(id: string, articlesId: string[]) {
-    return this.usersRepository.updateArticlesId(id, articlesId);
-  }
-
   async updateAllArticles(id: string) {
     return this.usersRepository.updateAllArticles(id);
+  }
+
+  async addArticleToUser(userId: string, articleId: string): Promise<User> {
+    return this.usersRepository.addArticleToUser(userId, articleId);
+  }
+
+  async removeArticleFromUser(
+    userId: string,
+    articleId: string,
+  ): Promise<User> {
+    return this.usersRepository.removeArticleFromUser(userId, articleId);
   }
 }
