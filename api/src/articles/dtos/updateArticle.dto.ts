@@ -1,7 +1,7 @@
 import { PickType } from '@nestjs/swagger';
-import { Article } from '../articles.schema';
+import { Articles } from '../articles.schema';
 
-export class UpdateArticleDto extends PickType(Article, [
+export class UpdateArticleDto extends PickType(Articles, [
   'status',
   'title',
   'description',

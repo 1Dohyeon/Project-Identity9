@@ -4,13 +4,15 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { ArticleRepository } from './articles.repository';
-import { Article, ArticleSchema } from './articles.schema';
+import { Articles, ArticlesSchema } from './articles.schema';
 import { ArticlesController } from './controller/articles.controller';
 import { ArticlesService } from './service/articles.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Article.name, schema: ArticleSchema }]),
+    MongooseModule.forFeature([
+      { name: Articles.name, schema: ArticlesSchema },
+    ]),
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
