@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { User } from './users.schema';
@@ -12,8 +12,8 @@ export class UsersRepository {
   ) {}
 
   // 계정 삭제
-  async deleteUser(id) {
-    const user = await this.userModel.findByIdAndDelete(id).exec();
+  async deleteUser(userId: string) {
+    const user = await this.userModel.findByIdAndDelete(userId).exec();
     return user.readOnlyData;
   }
 
@@ -53,7 +53,7 @@ export class UsersRepository {
   // nickname을 통해서 user를 찾아줌
   async getCurrentUser(nickname: string): Promise<any | null> {
     const user = await this.userModel.findOne({ nickname });
-    return user.readOnlyData;
+    return user.readOnlyDataWithArticles;
   }
 
   // email을 통해서 user를 찾아줌(readOnlyData 사용하면 안됨..)
@@ -66,5 +66,55 @@ export class UsersRepository {
   async getReadOnlyData(id: string): Promise<any | null> {
     const user = await this.userModel.findById(id);
     return user.readOnlyData;
+  }
+
+  async plusPrivateArticle(id: string): Promise<any | null> {
+    const user = await this.userModel.findById(id);
+
+    user.privateArticlesCount += 1;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
+  }
+
+  async minusPrivateArticle(id: string): Promise<any | null> {
+    const user = await this.userModel.findById(id);
+
+    user.privateArticlesCount -= 1;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
+  }
+
+  async updateAllArticles(id: string) {
+    const user = await this.userModel.findById(id);
+    user.allArticlesCount =
+      user.privateArticlesCount + user.publicArticlesCount;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
+  }
+
+  async addArticleToUser(userId: string, articleId: string): Promise<User> {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $push: { articlesId: new Types.ObjectId(articleId) } },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async removeArticleFromUser(
+    userId: string,
+    articleId: string,
+  ): Promise<User> {
+    return await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $pull: { articlesId: new Types.ObjectId(articleId) } },
+        { new: true },
+      )
+      .exec();
   }
 }

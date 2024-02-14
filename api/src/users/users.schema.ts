@@ -1,12 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import {
+  IsArray,
   IsEmail,
   IsNotEmpty,
   IsNumber,
   IsString,
   Length,
 } from 'class-validator';
-import { Document, SchemaOptions } from 'mongoose';
+import { Document, SchemaOptions, Types } from 'mongoose';
 
 // createdAt, updatedAt field
 const options: SchemaOptions = {
@@ -90,6 +91,11 @@ export class User extends Document {
   @IsNumber()
   allArticlesCount: number;
 
+  // 사용자 게시물 id
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Article' }] })
+  @IsArray()
+  articlesId: Types.ObjectId[];
+
   readonly readOnlyData: {
     id: string;
     email: string;
@@ -103,22 +109,44 @@ export class User extends Document {
     name: string;
     nickname: string;
     articles: {
+      articlesId: Types.ObjectId[];
       pageArticlesCount: number;
-      allArticlesCount: number;
       publicArticlesCount: number;
       privateArticlesCount: number;
+      allArticlesCount: number;
     };
   };
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// 필요한 데이터만 return
+// Virtuals 포함 설정
+UserSchema.set('toJSON', { virtuals: true });
+UserSchema.set('toObject', { virtuals: true });
+
+// user 정보만
 UserSchema.virtual('readOnlyData').get(function (this: User) {
   return {
     id: this.id,
     email: this.email,
     name: this.name,
     nickname: this.nickname,
+  };
+});
+
+// user와 user의 article 관련 정보들
+UserSchema.virtual('readOnlyDataWithArticles').get(function (this: User) {
+  return {
+    id: this.id,
+    email: this.email,
+    name: this.name,
+    nickname: this.nickname,
+    articles: {
+      articlesId: this.articlesId,
+      pageArticlesCount: this.pageArticlesCount,
+      allArticlesCount: this.allArticlesCount,
+      publicArticlesCount: this.publicArticlesCount,
+      privateArticlesCount: this.privateArticlesCount,
+    },
   };
 });

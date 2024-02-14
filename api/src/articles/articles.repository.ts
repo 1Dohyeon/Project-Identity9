@@ -12,7 +12,7 @@ export class ArticleRepository {
   ) {}
 
   // create new article
-  async create(createArticleDto: CreateArticleDto): Promise<Article> {
+  async create(createArticleDto: CreateArticleDto): Promise<any | null> {
     const newArticle = new this.articleModel({
       ...createArticleDto,
     });
@@ -28,8 +28,8 @@ export class ArticleRepository {
   }
 
   // delete article
-  async delete(id: string) {
-    const article = await this.articleModel.findByIdAndDelete(id).exec();
+  async delete(articleId: string) {
+    const article = await this.articleModel.findByIdAndDelete(articleId).exec();
     return article.readOnlyData;
   }
 
@@ -44,5 +44,16 @@ export class ArticleRepository {
   async findOne(id: string): Promise<any> {
     const article = await this.articleModel.findById(id).exec();
     return article ? article.readOnlyData : null;
+  }
+
+  // user id를 통해서 articles의 id만 가져옴
+  async findArticlesIdByAuthorId(authorId: string): Promise<string[]> {
+    const articles = await this.articleModel.find({ authorId }).exec(); // 해당 사용자가 작성한 모든 게시글 조회
+    const articlesId = articles.map((article) => article._id.toString()); // 각 게시글의 ID를 문자열로 변환하여 배열 생성
+    return articlesId;
+  }
+
+  async deleteAll(userId: string) {
+    return await this.articleModel.deleteMany({ authorId: userId });
   }
 }

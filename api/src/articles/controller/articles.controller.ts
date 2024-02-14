@@ -34,13 +34,17 @@ export class ArticlesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createArticle(@Request() req: any) {
-    const defaultArticleData = {
-      authorId: req.user.id,
-      status: ArticlesStatus.PRIVATE,
-      title: 'New Article',
-      description: 'Default content',
-    };
-    return await this.articlesService.create(defaultArticleData);
+    const newArticle = this.articlesService.create(
+      {
+        authorId: req.user.id,
+        status: ArticlesStatus.PRIVATE,
+        title: 'New Article',
+        description: 'Default content',
+      },
+      req.user.id,
+    );
+
+    return newArticle;
   }
 
   // show page that you can write
@@ -62,7 +66,8 @@ export class ArticlesController {
   // delete (article)id's article
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  deleteArticle(@Param('id') id: string) {
-    return this.articlesService.delete(id);
+  async deleteArticle(@Param('id') articleId: string, @Request() req: any) {
+    const deleteArticle = this.articlesService.delete(articleId, req.user.id);
+    return deleteArticle;
   }
 }
