@@ -3,12 +3,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { UpdateUserDto } from './dtos/updateUser.dto';
-import { User } from './users.schema';
+import { Users } from './users.schema';
 
 @Injectable()
 export class UsersRepository {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
+    @InjectModel(Users.name) private readonly userModel: Model<Users>,
   ) {}
 
   // 계정 삭제
@@ -40,7 +40,7 @@ export class UsersRepository {
   }
 
   // user 데이터 생성
-  async create(user: SignupRequestDto): Promise<User> {
+  async create(user: SignupRequestDto): Promise<Users> {
     return await this.userModel.create(user);
   }
 
@@ -95,7 +95,7 @@ export class UsersRepository {
     return user.readOnlyDataWithArticles;
   }
 
-  async addArticleToUser(userId: string, articleId: string): Promise<User> {
+  async addArticleToUser(userId: string, articleId: string): Promise<Users> {
     return this.userModel
       .findByIdAndUpdate(
         userId,
@@ -108,7 +108,7 @@ export class UsersRepository {
   async removeArticleFromUser(
     userId: string,
     articleId: string,
-  ): Promise<User> {
+  ): Promise<Users> {
     return await this.userModel
       .findByIdAndUpdate(
         userId,

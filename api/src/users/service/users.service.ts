@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ArticlesService } from 'src/articles/service/articles.service';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { UsersRepository } from '../users.repository';
-import { User } from '../users.schema';
+import { Users } from '../users.schema';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly articlesService: ArticlesService,
@@ -15,8 +15,8 @@ export class UserService {
     return this.usersRepository.getCurrentUser(nickname);
   }
 
-  async updateInfo(id: string, updateUserDto: UpdateUserDto) {
-    return this.usersRepository.updateInfo(id, updateUserDto);
+  async updateInfo(userId: string, updateUserDto: UpdateUserDto) {
+    return this.usersRepository.updateInfo(userId, updateUserDto);
   }
 
   async deleteUser(userId: string) {
@@ -25,26 +25,26 @@ export class UserService {
     return deletedUser;
   }
 
-  async plusPrivateArticle(id: string) {
-    return this.usersRepository.plusPrivateArticle(id);
+  async plusPrivateArticle(userId: string) {
+    return this.usersRepository.plusPrivateArticle(userId);
   }
 
-  async minusPrivateArticle(id: string) {
-    return this.usersRepository.minusPrivateArticle(id);
+  async minusPrivateArticle(userId: string) {
+    return this.usersRepository.minusPrivateArticle(userId);
   }
 
-  async updateAllArticles(id: string) {
-    return this.usersRepository.updateAllArticles(id);
+  async updateAllArticles(userId: string) {
+    return this.usersRepository.updateAllArticles(userId);
   }
 
-  async addArticleToUser(userId: string, articleId: string): Promise<User> {
+  async addArticleToUser(userId: string, articleId: string): Promise<Users> {
     return this.usersRepository.addArticleToUser(userId, articleId);
   }
 
   async removeArticleFromUser(
     userId: string,
     articleId: string,
-  ): Promise<User> {
+  ): Promise<Users> {
     return this.usersRepository.removeArticleFromUser(userId, articleId);
   }
 }

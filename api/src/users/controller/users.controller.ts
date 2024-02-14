@@ -14,19 +14,19 @@ import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
-import { UserService } from '../service/users.service';
+import { UsersService } from '../service/users.service';
 
 // 글로벌 설정 말고 데코레이터로 각 컨트롤러마다 설정 가능
 @Controller('user')
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
-  // 내 프로필 페이지
+  // 내 프로필 페이지(id 아님 nickname임)
   @Get(':nickname')
   getCurrentUser(@Param('nickname') nickname: string) {
-    return this.userService.getCurrentUser(nickname);
+    return this.usersService.getCurrentUser(nickname);
   }
 
   // 프로필 수정 페이지
@@ -39,8 +39,11 @@ export class UserController {
   // 프로필 수정 후 프로필 페이지
   @UseGuards(JwtAuthGuard)
   @Patch(':id/update')
-  updataInfo(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.updateInfo(id, updateUserDto);
+  updateInfo(
+    @Param('id') userId: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateInfo(userId, updateUserDto);
   }
 
   // 로그아웃
@@ -52,7 +55,7 @@ export class UserController {
   // 계정 삭제
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
-    return this.userService.deleteUser(id);
+  deleteUser(@Param('id') userId: string) {
+    return this.usersService.deleteUser(userId);
   }
 }

@@ -26,48 +26,49 @@ export class ArticlesController {
 
   // show (article)id's article
   @Get(':id')
-  getOneArticle(@Param('id') id: string) {
-    return this.articlesService.findOne(id);
+  getOneArticle(@Param('id') articleId: string) {
+    return this.articlesService.findOne(articleId);
   }
 
   // create new article
   @UseGuards(JwtAuthGuard)
   @Post()
   async createArticle(@Request() req: any) {
-    const newArticle = this.articlesService.create(
-      {
-        authorId: req.user.id,
-        status: ArticlesStatus.PRIVATE,
-        title: 'New Article',
-        description: 'Default content',
-      },
-      req.user.id,
-    );
+    const defaultArticle = {
+      authorId: req.user.id,
+      status: ArticlesStatus.PRIVATE,
+      title: 'New Article',
+      description: 'Default content',
+    };
+    const userId = req.user.id;
 
+    const newArticle = this.articlesService.create(defaultArticle, userId);
     return newArticle;
   }
 
   // show page that you can write
   @Get(':id/write')
-  updateArticlePage(@Param('id') id: string) {
-    return this.articlesService.findOne(id);
+  updateArticlePage(@Param('id') articleId: string) {
+    return this.articlesService.findOne(articleId);
   }
 
   // update (article)id's article
   @UseGuards(JwtAuthGuard)
   @Patch(':id/write')
   updateArticle(
-    @Param('id') id: string,
+    @Param('id') articleId: string,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
-    return this.articlesService.update(id, updateArticleDto);
+    return this.articlesService.update(articleId, updateArticleDto);
   }
 
   // delete (article)id's article
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteArticle(@Param('id') articleId: string, @Request() req: any) {
-    const deleteArticle = this.articlesService.delete(articleId, req.user.id);
+    const userId = req.user.id;
+
+    const deleteArticle = this.articlesService.delete(articleId, userId);
     return deleteArticle;
   }
 }

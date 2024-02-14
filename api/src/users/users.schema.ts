@@ -15,7 +15,7 @@ const options: SchemaOptions = {
 };
 
 @Schema(options)
-export class User extends Document {
+export class Users extends Document {
   // 사용자 email(로그인시 id 역할, 중복x)
   @Prop({
     required: true,
@@ -118,14 +118,14 @@ export class User extends Document {
   };
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(Users);
 
 // Virtuals 포함 설정
 UserSchema.set('toJSON', { virtuals: true });
 UserSchema.set('toObject', { virtuals: true });
 
 // user 정보만
-UserSchema.virtual('readOnlyData').get(function (this: User) {
+UserSchema.virtual('readOnlyData').get(function (this: Users) {
   return {
     id: this.id,
     email: this.email,
@@ -135,7 +135,7 @@ UserSchema.virtual('readOnlyData').get(function (this: User) {
 });
 
 // user와 user의 article 관련 정보들
-UserSchema.virtual('readOnlyDataWithArticles').get(function (this: User) {
+UserSchema.virtual('readOnlyDataWithArticles').get(function (this: Users) {
   return {
     id: this.id,
     email: this.email,
