@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { ArticleRepository } from '../articles.repository';
+import { ArticlesRepository } from '../articles.repository';
 import { Articles } from '../articles.schema';
 import { CreateArticleDto } from '../dtos/createArticle.dto';
 import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 
 @Injectable()
 export class ArticlesService {
-  constructor(private readonly articleRepository: ArticleRepository) {}
+  constructor(private readonly articlesRepository: ArticlesRepository) {}
 
   /**
    * 새로운 article 생성
    * UserArticleInteractionService createArticleForUser calls it
    */
   async create(createArticleDto: CreateArticleDto) {
-    const newArticle = await this.articleRepository.create(createArticleDto);
+    const newArticle = await this.articlesRepository.create(createArticleDto);
     return newArticle;
   }
 
@@ -22,7 +22,7 @@ export class ArticlesService {
    * UserArticleInteractionService deleteArticleForUser calls it
    */
   async delete(articleId: string) {
-    const deleteArticle = await this.articleRepository.delete(articleId);
+    const deleteArticle = await this.articlesRepository.delete(articleId);
     return deleteArticle;
   }
 
@@ -31,7 +31,7 @@ export class ArticlesService {
    * UserArticleInteractionService deleteUser calls it
    */
   async deleteAll(userId: string) {
-    return this.articleRepository.deleteAll(userId);
+    return this.articlesRepository.deleteAll(userId);
   }
 
   /**
@@ -39,7 +39,7 @@ export class ArticlesService {
    * UserArticleInteractionService deleteArticleForUser calls it
    */
   async update(articleId: string, updateArticleDto: UpdateArticleDto) {
-    return this.articleRepository.update(articleId, updateArticleDto);
+    return this.articlesRepository.update(articleId, updateArticleDto);
   }
 
   /**
@@ -47,7 +47,7 @@ export class ArticlesService {
    * ArticlesController getArticlesPage calls it
    */
   async findAll(): Promise<Articles[]> {
-    return this.articleRepository.findAll();
+    return this.articlesRepository.findAll();
   }
 
   /**
@@ -55,6 +55,6 @@ export class ArticlesService {
    * ArticlesController getOneArticle calls it
    */
   async findOne(articleId: string) {
-    return this.articleRepository.findOne(articleId);
+    return this.articlesRepository.findOne(articleId);
   }
 }

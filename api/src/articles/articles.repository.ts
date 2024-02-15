@@ -6,12 +6,16 @@ import { CreateArticleDto } from './dtos/createArticle.dto';
 import { UpdateArticleDto } from './dtos/updateArticle.dto';
 
 @Injectable()
-export class ArticleRepository {
+export class ArticlesRepository {
   constructor(
     @InjectModel(Articles.name) private readonly articlesModel: Model<Articles>,
   ) {}
 
-  // create new article
+  // ArticlesRepository 내의 모든 메서드는 ArticleService를 통해서만 접근 가능
+
+  /**
+   * 새로운 article 생성
+   */
   async create(createArticleDto: CreateArticleDto): Promise<any | null> {
     const newArticle = new this.articlesModel({
       ...createArticleDto,
@@ -21,7 +25,9 @@ export class ArticleRepository {
     return newArticle.withoutDescription;
   }
 
-  // update article
+  /**
+   * article 업데이트
+   */
   async update(articleId: string, updateArticleDto: UpdateArticleDto) {
     const article = await this.articlesModel
       .findByIdAndUpdate(articleId, updateArticleDto, { new: true })
@@ -29,7 +35,9 @@ export class ArticleRepository {
     return article.withoutDescription;
   }
 
-  // delete article
+  /**
+   * article 삭제
+   */
   async delete(articleId: string) {
     const article = await this.articlesModel
       .findByIdAndDelete(articleId)
@@ -38,19 +46,27 @@ export class ArticleRepository {
     return article.withoutDescription;
   }
 
-  // Mongoose에서 직접적으로 가상 필드를 쿼리 결과에 포함시키는 것은 지원하지 않기 때문에,
-  // 문서를 조회한 후 각 문서의 가상 필드에 접근하여 필요한 데이터를 수동으로 구성해야함.
+  /**
+   * 모든 article들 조회
+   * Mongoose에서 직접적으로 가상 필드를 쿼리 결과에 포함시키는 것은 지원하지 않기 때문에,
+   * 문서를 조회한 후 각 문서의 가상 필드에 접근하여 필요한 데이터를 수동으로 구성해야함.
+   */
   async findAll(): Promise<any[]> {
     const articles = await this.articlesModel.find().exec();
     return articles.map((article) => article.withoutDescription);
   }
 
-  // 객체가 항상 존재한다고 보장할 수 없다. 즉, 문서를 찾지 못한 경우 null 또는 undefined가 될 수 있으므로, 이를 고려한 접근 방식이 필요함.
+  /**
+   * 특정 article 조회
+   */
   async findOne(articleId: string): Promise<any> {
     const article = await this.articlesModel.findById(articleId).exec();
     return article ? article.withoutDescription : null;
   }
 
+  /**
+   * 모든 article 삭제
+   */
   async deleteAll(userId: string) {
     // "userId: userId" 기존 문법에 ES6 속성 적용 userId(파라미터와 객체 키가 같을 때 적용)
     return await this.articlesModel.deleteMany({ authorId: userId });

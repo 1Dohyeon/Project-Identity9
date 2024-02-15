@@ -11,13 +11,26 @@ export class UsersRepository {
     @InjectModel(Users.name) private readonly userModel: Model<Users>,
   ) {}
 
-  // 계정 삭제
+  // UsersRepository는 UsersService에서만 접근 가능
+
+  /**
+   * user 생성
+   */
+  async create(user: SignupRequestDto): Promise<Users> {
+    return await this.userModel.create(user);
+  }
+
+  /**
+   * user 삭제
+   */
   async deleteUser(userId: string) {
     const user = await this.userModel.findByIdAndDelete(userId).exec();
     return user.readOnlyData;
   }
 
-  // 마이페이지 업데이트
+  /**
+   * user 정보 업데이트
+   */
   async updateInfo(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.userModel
       .findByIdAndUpdate(id, updateUserDto, { new: true })
@@ -25,49 +38,59 @@ export class UsersRepository {
     return user.readOnlyData;
   }
 
-  // email 중복 확인
+  /**
+   * email 존재 여부 확인
+   */
   async existsByEmail(email: string): Promise<boolean> {
     const result = await this.userModel.exists({ email });
     if (result) return true;
     else return false;
   }
 
-  // nickname 중복 확인
+  /**
+   * nickname 존재 여부 확인
+   */
   async existsByNickname(nickname: string): Promise<boolean> {
     const result = await this.userModel.exists({ nickname });
     if (result) return true;
     else return false;
   }
 
-  // user 데이터 생성
-  async create(user: SignupRequestDto): Promise<Users> {
-    return await this.userModel.create(user);
-  }
-
-  // Id를 통해서 password 정보 없는 user 객체 반환
+  /**
+   * password 없는 user 데이터 찾아줌
+   */
   async findUserByIdWithoutPassword(userId: string): Promise<any | null> {
     const user = await this.userModel.findById(userId).select('-password');
     return user.readOnlyData;
   }
 
-  // nickname을 통해서 user를 찾아줌
+  /**
+   * nickname에 맞는 user 찾아줌
+   */
   async getCurrentUser(nickname: string): Promise<any | null> {
     const user = await this.userModel.findOne({ nickname });
     return user.readOnlyDataWithArticles;
   }
 
-  // email을 통해서 user를 찾아줌(readOnlyData 사용하면 안됨..)
+  /**
+   * email을 통해서 user를 찾아줌(readOnlyData 사용하면 안됨..)
+   */
   async findUserByEmail(email: string): Promise<any | null> {
     const user = await this.userModel.findOne({ email });
     return user;
   }
 
-  // Id를 통해서 passport 정보 없는 user 객체 반환(User의 readOnlyData 활용)
+  /**
+   * Id를 통해서 passport 정보 없는 user 객체 반환(User의 readOnlyData 활용)
+   */
   async getReadOnlyData(id: string): Promise<any | null> {
     const user = await this.userModel.findById(id);
     return user.readOnlyData;
   }
 
+  /**
+   * user의 privateArticle 데이터 +1
+   */
   async plusPrivateArticle(id: string): Promise<any | null> {
     const user = await this.userModel.findById(id);
 
@@ -77,6 +100,9 @@ export class UsersRepository {
     return user.readOnlyDataWithArticles;
   }
 
+  /**
+   * user의 privateArticle 데이터 -1
+   */
   async minusPrivateArticle(id: string): Promise<any | null> {
     const user = await this.userModel.findById(id);
 
@@ -86,6 +112,9 @@ export class UsersRepository {
     return user.readOnlyDataWithArticles;
   }
 
+  /**
+   * user의 allArticles 데이터 업데이트
+   */
   async updateAllArticles(id: string) {
     const user = await this.userModel.findById(id);
     user.allArticlesCount =
@@ -95,6 +124,9 @@ export class UsersRepository {
     return user.readOnlyDataWithArticles;
   }
 
+  /**
+   * user 데이터에 articleId 추가
+   */
   async addArticleToUser(userId: string, articleId: string): Promise<Users> {
     return this.userModel
       .findByIdAndUpdate(
@@ -105,6 +137,9 @@ export class UsersRepository {
       .exec();
   }
 
+  /**
+   * user 데이터에 articleId 삭제
+   */
   async removeArticleFromUser(
     userId: string,
     articleId: string,
