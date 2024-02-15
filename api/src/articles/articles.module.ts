@@ -1,11 +1,10 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AuthModule } from 'src/auth/auth.module';
-import { UsersModule } from 'src/users/users.module';
 import { ArticleRepository } from './articles.repository';
 import { Articles, ArticlesSchema } from './articles.schema';
 import { ArticlesController } from './controller/articles.controller';
+import { CreateArticleDto } from './dtos/createArticle.dto';
 import { ArticlesService } from './service/articles.service';
 
 @Module({
@@ -17,11 +16,9 @@ import { ArticlesService } from './service/articles.service';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
-    forwardRef(() => AuthModule),
-    forwardRef(() => UsersModule),
   ],
   controllers: [ArticlesController],
-  providers: [ArticlesService, ArticleRepository],
-  exports: [ArticlesService, ArticleRepository],
+  providers: [ArticlesService, ArticleRepository, CreateArticleDto],
+  exports: [ArticlesService, ArticleRepository, CreateArticleDto],
 })
 export class ArticlesModule {}

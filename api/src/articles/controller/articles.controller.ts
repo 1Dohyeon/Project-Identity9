@@ -1,20 +1,22 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
-  Post,
-  Request,
+  UseFilters,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { ArticlesStatus } from '../articles.status';
+import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
+import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 import { ArticlesService } from '../service/articles.service';
 
 @Controller('articles')
+@UseFilters(HttpExceptionFilter)
+@UseInterceptors(SuccessInterceptor)
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
@@ -28,22 +30,6 @@ export class ArticlesController {
   @Get(':id')
   getOneArticle(@Param('id') articleId: string) {
     return this.articlesService.findOne(articleId);
-  }
-
-  // create new article
-  @UseGuards(JwtAuthGuard)
-  @Post()
-  async createArticle(@Request() req: any) {
-    const defaultArticle = {
-      authorId: req.user.id,
-      status: ArticlesStatus.PRIVATE,
-      title: 'New Article',
-      description: 'Default content',
-    };
-    const userId = req.user.id;
-
-    const newArticle = this.articlesService.create(defaultArticle, userId);
-    return newArticle;
   }
 
   // show page that you can write
@@ -60,15 +46,5 @@ export class ArticlesController {
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
     return this.articlesService.update(articleId, updateArticleDto);
-  }
-
-  // delete (article)id's article
-  @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async deleteArticle(@Param('id') articleId: string, @Request() req: any) {
-    const userId = req.user.id;
-
-    const deleteArticle = this.articlesService.delete(articleId, userId);
-    return deleteArticle;
   }
 }
