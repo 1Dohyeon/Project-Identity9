@@ -1,14 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ArticlesService } from 'src/articles/service/articles.service';
-import { UsersService } from 'src/users/service/users.service';
+import { UsersModule } from 'src/users/users.module';
 import { UserArticleInteractionService } from './user-article-interaction.service';
 
 @Module({
+  imports: [UsersModule],
   providers: [UserArticleInteractionService],
+  exports: [UserArticleInteractionService],
 })
-export class UserArticleInteractionModule {
-  constructor(
-    private usersService: UsersService,
-    private articleServices: ArticlesService,
-  ) {}
-}
+export class UserArticleInteractionModule {}
