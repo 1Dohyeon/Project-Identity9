@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ArticlesService } from 'src/articles/service/articles.service';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { UsersRepository } from '../users.repository';
 import { Users } from '../users.schema';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly usersRepository: UsersRepository,
-    private readonly articlesService: ArticlesService,
-  ) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async getCurrentUser(nickname: string) {
     return this.usersRepository.getCurrentUser(nickname);
@@ -21,7 +17,6 @@ export class UsersService {
 
   async deleteUser(userId: string) {
     const deletedUser = await this.usersRepository.deleteUser(userId);
-    await this.articlesService.deleteAll(userId);
     return deletedUser;
   }
 
