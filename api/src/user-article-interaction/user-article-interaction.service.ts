@@ -10,10 +10,10 @@ export class UserArticleInteractionService {
     private readonly articlesService: ArticlesService,
   ) {}
 
-  async deleteAll(userId: string) {
-    return this.articlesService.deleteAll(userId);
-  }
-
+  /**
+   * 새 Article 생성 및 user 에 articleId 추가
+   * to UserArticleInteractionController createArticle
+   */
   async createArticleForUser(
     userId: string,
     createArticleDto: CreateArticleDto,
@@ -27,6 +27,10 @@ export class UserArticleInteractionService {
     return newArticle;
   }
 
+  /**
+   * article 삭제 및 user에 존재하는 articleId 삭제
+   * to UserArticleInteractionController deleteArticle
+   */
   async deleteArticleForUser(articleId: string, userId: string) {
     const deleteArticle = await this.articlesService.delete(articleId);
 
@@ -39,9 +43,13 @@ export class UserArticleInteractionService {
     return deleteArticle;
   }
 
+  /**
+   * User 객체 삭제
+   * to UsersController deleteUser
+   */
   async deleteUser(userId: string) {
     const deletedUser = await this.usersService.deleteUser(userId);
-    await this.deleteAll(userId);
+    await this.articlesService.deleteAll(userId);
     return deletedUser;
   }
 }

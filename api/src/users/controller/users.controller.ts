@@ -23,7 +23,7 @@ import { UsersService } from '../service/users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // 내 프로필 페이지(id 아님 nickname임)
+  // 닉네임 사용자 페이지
   @Get(':nickname')
   getCurrentUser(@Param('nickname') nickname: string) {
     return this.usersService.getCurrentUser(nickname);
@@ -46,6 +46,7 @@ export class UsersController {
     return this.usersService.updateInfo(userId, updateUserDto);
   }
 
+  // 이 아래부터는 authService 로 옮길 예정
   // 로그아웃
   @Post()
   logout() {

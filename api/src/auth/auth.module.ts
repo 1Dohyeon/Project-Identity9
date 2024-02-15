@@ -6,6 +6,10 @@ import { AuthController } from './controller/auth.controller';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { AuthService } from './service/auth.service';
 
+/**
+ * 회원가입
+ * 로그인
+ */
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt', session: false }),

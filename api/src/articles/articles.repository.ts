@@ -51,13 +51,6 @@ export class ArticleRepository {
     return article ? article.withoutDescription : null;
   }
 
-  // userId를 통해서 articles의 id만 가져옴
-  async findArticlesIdByAuthorId(userId: string): Promise<string[]> {
-    const articles = await this.articlesModel.find({ authorId: userId }).exec(); // 해당 사용자가 작성한 모든 게시글 조회
-    const articlesId = articles.map((article) => article._id.toString()); // 각 게시글의 ID를 문자열로 변환하여 배열 생성
-    return articlesId;
-  }
-
   async deleteAll(userId: string) {
     // "userId: userId" 기존 문법에 ES6 속성 적용 userId(파라미터와 객체 키가 같을 때 적용)
     return await this.articlesModel.deleteMany({ authorId: userId });

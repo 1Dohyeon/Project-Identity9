@@ -12,7 +12,6 @@ import { ArticlesStatus } from 'src/articles/articles.status';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
-import { UsersService } from 'src/users/service/users.service';
 import { UserArticleInteractionService } from './user-article-interaction.service';
 
 @Controller('articles')
@@ -20,7 +19,6 @@ import { UserArticleInteractionService } from './user-article-interaction.servic
 @UseInterceptors(SuccessInterceptor)
 export class UserArticleInteractionController {
   constructor(
-    private readonly user: UsersService,
     private readonly userArticleInteractionService: UserArticleInteractionService,
   ) {}
 
