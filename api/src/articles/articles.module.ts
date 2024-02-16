@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ArticlesRepository } from './articles.repository';
 import { Articles, ArticlesSchema } from './articles.schema';
 import { ArticlesController } from './controller/articles.controller';
 import { ArticlesService } from './service/articles.service';
@@ -16,7 +17,7 @@ import { ArticlesService } from './service/articles.service';
     }),
   ],
   controllers: [ArticlesController],
-  providers: [ArticlesService],
-  exports: [ArticlesService],
+  providers: [ArticlesService, ArticlesRepository],
+  exports: [ArticlesService, ArticlesRepository],
 })
 export class ArticlesModule {}

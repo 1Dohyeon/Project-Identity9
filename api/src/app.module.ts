@@ -4,19 +4,19 @@ import { MongooseModule } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ArticlesModule } from './articles/articles.module';
 import { AuthModule } from './auth/auth.module';
 import { LoggerMiddleware } from './common/logger/logger.middleware';
+import { UserArticleInteractionModule } from './interactions/user-article-interaction/user-article-interaction.module';
 import { UsersModule } from './users/users.module';
-import { ArticlesModule } from './articles/articles.module';
-import { UserArticleInteractionModule } from './user-article-interaction/user-article-interaction.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    UsersModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
+    UsersModule,
     AuthModule,
     ArticlesModule,
     UserArticleInteractionModule,
