@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
@@ -51,12 +50,5 @@ export class UsersController {
   @Post()
   logout() {
     return 'hello world';
-  }
-
-  // 계정 삭제
-  @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  deleteUser(@Param('id') userId: string) {
-    return this.usersService.deleteUser(userId);
   }
 }

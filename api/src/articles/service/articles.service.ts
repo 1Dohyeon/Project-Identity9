@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ArticlesRepository } from '../articles.repository';
 import { Articles } from '../articles.schema';
+import { ArticlesStatus } from '../articles.status';
 import { CreateArticleDto } from '../dtos/createArticle.dto';
 import { UpdateArticleDto } from '../dtos/updateArticle.dto';
 
@@ -56,5 +57,9 @@ export class ArticlesService {
    */
   async findOne(articleId: string) {
     return this.articlesRepository.findOne(articleId);
+  }
+
+  async findOneStatus(articleId: string): Promise<ArticlesStatus | null> {
+    return this.articlesRepository.findOneStatus(articleId);
   }
 }

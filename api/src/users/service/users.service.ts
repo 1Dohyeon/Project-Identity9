@@ -82,6 +82,14 @@ export class UsersService {
   }
 
   /**
+   * user의 publicArticle 데이터 +1
+   * UserArticleInteractionService createArticleForUser calls it
+   */
+  async plusPublicArticle(userId: string) {
+    return this.usersRepository.plusPublicArticle(userId);
+  }
+
+  /**
    * user가 만든 articleId를 그 user에게 전달
    * UserArticleInteractionService createArticleForUser calls it
    */
@@ -95,6 +103,14 @@ export class UsersService {
    */
   async minusPrivateArticle(userId: string) {
     return this.usersRepository.minusPrivateArticle(userId);
+  }
+
+  /**
+   * user의 publicArticle 데이터 -1
+   * UserArticleInteractionService deleteArticleForUser calls it
+   */
+  async minusPublicArticle(userId: string) {
+    return this.usersRepository.minusPublicArticle(userId);
   }
 
   /**
