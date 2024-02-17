@@ -61,7 +61,7 @@ export class UsersRepository {
    */
   async findUserByIdWithoutPassword(userId: string): Promise<any | null> {
     const user = await this.userModel.findById(userId).select('-password');
-    return user.readOnlyData;
+    return user.readOnlyDataWithArticles;
   }
 
   /**

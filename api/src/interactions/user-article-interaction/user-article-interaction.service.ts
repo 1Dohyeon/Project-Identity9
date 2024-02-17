@@ -60,16 +60,23 @@ export class UserArticleInteractionService {
     articleId: string,
     updateArticleDto: UpdateArticleDto,
   ) {
+    const user = await this.usersService.findUserById(userId);
+
     const originArticleStatus =
       await this.articlesService.findOneStatus(articleId);
 
-    const updateArticle = await this.articlesService.update(
-      articleId,
-      updateArticleDto,
-    );
+    if (originArticleStatus != updateArticleDto.status) {
+      if (
+        user.articles.publicArticlesCount >= 9 &&
+        updateArticleDto.status === ArticlesStatus.PUBLIC
+      ) {
+        return 'YOU ALREADY HAVE NINE ARTICLES';
+      } else {
+        const updateArticle = await this.articlesService.update(
+          articleId,
+          updateArticleDto,
+        );
 
-    if (updateArticle) {
-      if (originArticleStatus != updateArticle.status) {
         switch (updateArticle.status) {
           case ArticlesStatus.PRIVATE:
             await this.usersService.plusPrivateArticle(userId);
@@ -83,10 +90,10 @@ export class UserArticleInteractionService {
             await this.usersService.updateAllArticles(userId);
             break;
         }
+
+        return updateArticle;
       }
     }
-
-    return updateArticle;
   }
 
   /**

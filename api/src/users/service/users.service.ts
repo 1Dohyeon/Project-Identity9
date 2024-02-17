@@ -65,6 +65,14 @@ export class UsersService {
   }
 
   /**
+   * id를 통해서 user를 찾아줌
+   * UserArticleInteractionService update calls it
+   */
+  async findUserById(userId: string): Promise<any | null> {
+    return this.usersRepository.findUserByIdWithoutPassword(userId);
+  }
+
+  /**
    * userId에 맞는 user 객체 삭제
    * userController deleteUser calls it
    */
