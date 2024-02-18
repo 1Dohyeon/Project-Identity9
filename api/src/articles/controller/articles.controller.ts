@@ -1,17 +1,7 @@
-import {
-  Controller,
-  Get,
-  Param,
-  UseFilters,
-  UseInterceptors,
-} from '@nestjs/common';
-import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ArticlesService } from '../service/articles.service';
 
 @Controller('articles')
-@UseFilters(HttpExceptionFilter)
-@UseInterceptors(SuccessInterceptor)
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 

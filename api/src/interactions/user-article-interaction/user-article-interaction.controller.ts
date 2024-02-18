@@ -6,20 +6,14 @@ import {
   Patch,
   Post,
   Request,
-  UseFilters,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ArticlesStatus } from 'src/articles/articles.status';
 import { UpdateArticleDto } from 'src/articles/dtos/updateArticle.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { UserArticleInteractionService } from './user-article-interaction.service';
 
 @Controller()
-@UseFilters(HttpExceptionFilter)
-@UseInterceptors(SuccessInterceptor)
 export class UserArticleInteractionController {
   constructor(
     private readonly userArticleInteractionService: UserArticleInteractionService,

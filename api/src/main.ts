@@ -27,7 +27,7 @@ async function bootstrap() {
 
   // CORS
   app.enableCors({
-    origin: true, // 배포할 때는 특정 url로 수정
+    origin: 'http://localhost:3000', // 배포할 때는 특정 url로 수정
     credentials: true,
   });
 

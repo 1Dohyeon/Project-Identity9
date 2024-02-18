@@ -5,20 +5,14 @@ import {
   Param,
   Patch,
   Post,
-  UseFilters,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
-import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
-import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { UsersService } from '../service/users.service';
 
 // 글로벌 설정 말고 데코레이터로 각 컨트롤러마다 설정 가능
 @Controller('user')
-@UseFilters(HttpExceptionFilter)
-@UseInterceptors(SuccessInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
