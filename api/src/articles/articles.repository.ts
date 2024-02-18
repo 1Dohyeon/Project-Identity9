@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Articles } from './articles.schema';
+import { ArticlesStatus } from './articles.status';
 import { CreateArticleDto } from './dtos/createArticle.dto';
 import { UpdateArticleDto } from './dtos/updateArticle.dto';
 
@@ -62,6 +63,14 @@ export class ArticlesRepository {
   async findOne(articleId: string): Promise<any> {
     const article = await this.articlesModel.findById(articleId).exec();
     return article ? article.withoutDescription : null;
+  }
+
+  /**
+   * 특정 article status 조회
+   */
+  async findOneStatus(articleId: string): Promise<ArticlesStatus | null> {
+    const article = await this.articlesModel.findById(articleId).exec();
+    return article.status;
   }
 
   /**

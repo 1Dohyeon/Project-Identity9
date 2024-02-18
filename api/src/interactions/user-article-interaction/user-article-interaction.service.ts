@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ArticlesStatus } from 'src/articles/articles.status';
 import { CreateArticleDto } from 'src/articles/dtos/createArticle.dto';
+import { UpdateArticleDto } from 'src/articles/dtos/updateArticle.dto';
 import { ArticlesService } from 'src/articles/service/articles.service';
 import { UsersService } from 'src/users/service/users.service';
 
@@ -20,7 +22,6 @@ export class UserArticleInteractionService {
   ) {
     const newArticle = await this.articlesService.create(createArticleDto);
     if (newArticle) {
-      await this.usersService.addArticleToUser(userId, newArticle._id);
       await this.usersService.plusPrivateArticle(userId);
       await this.usersService.updateAllArticles(userId);
     }
@@ -35,12 +36,64 @@ export class UserArticleInteractionService {
     const deleteArticle = await this.articlesService.delete(articleId);
 
     if (deleteArticle) {
-      await this.usersService.removeArticleFromUser(userId, articleId); // User에 Article ID 삭제
-      await this.usersService.minusPrivateArticle(userId);
-      await this.usersService.updateAllArticles(userId);
+      switch (deleteArticle.status) {
+        case ArticlesStatus.PRIVATE:
+          await this.usersService.minusPrivateArticle(userId);
+          await this.usersService.updateAllArticles(userId);
+          break;
+
+        case ArticlesStatus.PUBLIC:
+          await this.usersService.minusPublicArticle(userId);
+          await this.usersService.updateAllArticles(userId);
+          break;
+      }
     }
 
     return deleteArticle;
+  }
+
+  /**
+   * article 객체 업데이트
+   */
+  async update(
+    userId: string,
+    articleId: string,
+    updateArticleDto: UpdateArticleDto,
+  ) {
+    const user = await this.usersService.findUserById(userId);
+
+    const originArticleStatus =
+      await this.articlesService.findOneStatus(articleId);
+
+    if (originArticleStatus != updateArticleDto.status) {
+      if (
+        user.articles.publicArticlesCount >= 9 &&
+        updateArticleDto.status === ArticlesStatus.PUBLIC
+      ) {
+        return 'YOU ALREADY HAVE NINE ARTICLES';
+      } else {
+        const updateArticle = await this.articlesService.update(
+          articleId,
+          updateArticleDto,
+        );
+
+        switch (updateArticle.status) {
+          case ArticlesStatus.PRIVATE:
+            await this.usersService.plusPrivateArticle(userId);
+            await this.usersService.minusPublicArticle(userId);
+            await this.usersService.updateAllArticles(userId);
+            break;
+
+          case ArticlesStatus.PUBLIC:
+            await this.usersService.plusPublicArticle(userId);
+            await this.usersService.minusPrivateArticle(userId);
+            await this.usersService.updateAllArticles(userId);
+            break;
+        }
+
+        return updateArticle;
+      }
+    }
   }
 
   /**
@@ -48,8 +101,8 @@ export class UserArticleInteractionService {
    * to UsersController deleteUser
    */
   async deleteUser(userId: string) {
-    const deletedUser = await this.usersService.deleteUser(userId);
     await this.articlesService.deleteAll(userId);
+    const deletedUser = await this.usersService.deleteUser(userId);
     return deletedUser;
   }
 }

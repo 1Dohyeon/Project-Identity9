@@ -61,7 +61,7 @@ export class UsersRepository {
    */
   async findUserByIdWithoutPassword(userId: string): Promise<any | null> {
     const user = await this.userModel.findById(userId).select('-password');
-    return user.readOnlyData;
+    return user.readOnlyDataWithArticles;
   }
 
   /**
@@ -101,12 +101,36 @@ export class UsersRepository {
   }
 
   /**
+   * user의 privateArticle 데이터 +1
+   */
+  async plusPublicArticle(id: string): Promise<any | null> {
+    const user = await this.userModel.findById(id);
+
+    user.publicArticlesCount += 1;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
+  }
+
+  /**
    * user의 privateArticle 데이터 -1
    */
   async minusPrivateArticle(id: string): Promise<any | null> {
     const user = await this.userModel.findById(id);
 
     user.privateArticlesCount -= 1;
+    await user.save();
+
+    return user.readOnlyDataWithArticles;
+  }
+
+  /**
+   * user의 privateArticle 데이터 -1
+   */
+  async minusPublicArticle(id: string): Promise<any | null> {
+    const user = await this.userModel.findById(id);
+
+    user.publicArticlesCount -= 1;
     await user.save();
 
     return user.readOnlyDataWithArticles;

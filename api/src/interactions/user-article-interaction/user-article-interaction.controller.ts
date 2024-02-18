@@ -1,7 +1,9 @@
 import {
+  Body,
   Controller,
   Delete,
   Param,
+  Patch,
   Post,
   Request,
   UseFilters,
@@ -9,12 +11,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ArticlesStatus } from 'src/articles/articles.status';
+import { UpdateArticleDto } from 'src/articles/dtos/updateArticle.dto';
 import { JwtAuthGuard } from 'src/auth/jwt/jwt.guard';
 import { HttpExceptionFilter } from 'src/common/exception/httpException.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { UserArticleInteractionService } from './user-article-interaction.service';
 
-@Controller('articles')
+@Controller()
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessInterceptor)
 export class UserArticleInteractionController {
@@ -22,9 +25,11 @@ export class UserArticleInteractionController {
     private readonly userArticleInteractionService: UserArticleInteractionService,
   ) {}
 
-  // create new article
+  /**
+   * article 객체 생성
+   */
   @UseGuards(JwtAuthGuard)
-  @Post()
+  @Post('articles')
   async createArticle(@Request() req: any) {
     const defaultArticle = {
       authorId: req.user.id,
@@ -39,15 +44,41 @@ export class UserArticleInteractionController {
     return newArticle;
   }
 
-  // delete (article)id's article
+  /**
+   * article 객체 업데이트
+   */
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async deleteArticle(@Param('id') articleId: string, userId: string) {
+  @Patch('articles/:id/write')
+  updateArticle(
+    @Request() req: any,
+    @Param('id') articleId: string,
+    @Body() updateArticleDto: UpdateArticleDto,
+  ) {
+    return this.userArticleInteractionService.update(
+      req.user.id,
+      articleId,
+      updateArticleDto,
+    );
+  }
+
+  /**
+   * article 객체 삭제
+   */
+  @UseGuards(JwtAuthGuard)
+  @Delete('articles/:id')
+  async deleteArticle(@Param('id') articleId: string, @Request() req: any) {
     const deleteArticle =
       this.userArticleInteractionService.deleteArticleForUser(
         articleId,
-        userId,
+        req.user.id,
       );
     return deleteArticle;
+  }
+
+  // 계정 삭제
+  @UseGuards(JwtAuthGuard)
+  @Delete('user/:id')
+  deleteUser(@Param('id') userId: string) {
+    return this.userArticleInteractionService.deleteUser(userId);
   }
 }

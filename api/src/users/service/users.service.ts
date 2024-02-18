@@ -65,6 +65,14 @@ export class UsersService {
   }
 
   /**
+   * id를 통해서 user를 찾아줌
+   * UserArticleInteractionService update calls it
+   */
+  async findUserById(userId: string): Promise<any | null> {
+    return this.usersRepository.findUserByIdWithoutPassword(userId);
+  }
+
+  /**
    * userId에 맞는 user 객체 삭제
    * userController deleteUser calls it
    */
@@ -82,6 +90,14 @@ export class UsersService {
   }
 
   /**
+   * user의 publicArticle 데이터 +1
+   * UserArticleInteractionService createArticleForUser calls it
+   */
+  async plusPublicArticle(userId: string) {
+    return this.usersRepository.plusPublicArticle(userId);
+  }
+
+  /**
    * user가 만든 articleId를 그 user에게 전달
    * UserArticleInteractionService createArticleForUser calls it
    */
@@ -95,6 +111,14 @@ export class UsersService {
    */
   async minusPrivateArticle(userId: string) {
     return this.usersRepository.minusPrivateArticle(userId);
+  }
+
+  /**
+   * user의 publicArticle 데이터 -1
+   * UserArticleInteractionService deleteArticleForUser calls it
+   */
+  async minusPublicArticle(userId: string) {
+    return this.usersRepository.minusPublicArticle(userId);
   }
 
   /**
