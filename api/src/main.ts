@@ -25,6 +25,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
+  // CORS
+  app.enableCors({
+    origin: true, // 배포할 때는 특정 url로 수정
+    credentials: true,
+  });
+
   await app.listen(PORT);
 }
 bootstrap();
