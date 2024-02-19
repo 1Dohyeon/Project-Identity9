@@ -7,7 +7,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FC, FormEvent } from "react";
+import axios from "axios";
+import { FC } from "react";
 import { Link } from "react-router-dom";
 import useInput from "../../../hooks/input/use.input";
 import { validateEmail } from "../../../shared/utils/validation/email";
@@ -35,16 +36,29 @@ const SignInComponent: FC = () => {
     passwordClearHandler();
   };
 
-  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (emailHasError || passwordHasError) return;
 
     if (email.length === 0 || password.length === 0) return;
 
-    console.log("USER: ", email, ", ", password);
-
-    clearForm();
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/signin`,
+        {
+          email,
+          password,
+        }
+      );
+      console.log(response.data);
+      alert("로그인 성공");
+      // 여기서 로그인 성공 후의 로직을 처리할 수 있습니다.
+    } catch (error) {
+      console.error(error);
+      alert("로그인 실패");
+      // 에러 처리
+    }
   };
 
   return (
