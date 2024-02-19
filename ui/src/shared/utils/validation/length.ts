@@ -21,6 +21,6 @@ export const validatePasswordLength: ValidatorFn = (text: string): boolean => {
   return _validateLength(text, { min: 6, max: 20 });
 };
 
-export const validateNickNameLength: ValidatorFn = (text: string): boolean => {
+export const validateNicknameLength: ValidatorFn = (text: string): boolean => {
   return _validateLength(text, { min: 4, max: 16 });
 };

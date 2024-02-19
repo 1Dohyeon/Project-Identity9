@@ -56,9 +56,11 @@ const SignInComponent: FC = () => {
       // 여기서 로그인 성공 후의 로직을 처리할 수 있습니다.
     } catch (error) {
       console.error(error);
-      alert("로그인 실패");
+      alert("이메일 또는 패스워드를 확인해주세요.");
       // 에러 처리
     }
+
+    clearForm();
   };
 
   return (

@@ -7,18 +7,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FC, FormEvent } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import useInput from "../../../hooks/input/use.input";
 import { validateEmail } from "../../../shared/utils/validation/email";
 import {
   validateNameLength,
-  validateNickNameLength,
+  validateNicknameLength,
   validatePasswordLength,
 } from "../../../shared/utils/validation/length";
-import { NewUser } from "../models/newUser";
 
-const RegisterComponent: FC = () => {
+const RegisterComponent: React.FC = () => {
+  const navigate = useNavigate();
   const {
     text: name,
     shouldDisplayError: nameHasError,
@@ -45,62 +45,65 @@ const RegisterComponent: FC = () => {
 
   const {
     text: confirmPassword,
-    shouldDisplayError: confirmPasswordHasError,
     textChangeHandler: confirmPasswordChangeHandler,
     inputBlurHandler: confirmPasswordBlurHandler,
     clearHandler: confirmPasswordClearHandler,
   } = useInput(validatePasswordLength);
 
   const {
-    text: nickName,
-    shouldDisplayError: nickNameHasError,
-    textChangeHandler: nickNameChangeHandler,
-    inputBlurHandler: nickNameBlurHandler,
-    clearHandler: nickNameClearHandler,
-  } = useInput(validateNickNameLength);
+    text: nickname,
+    shouldDisplayError: nicknameHasError,
+    textChangeHandler: nicknameChangeHandler,
+    inputBlurHandler: nicknameBlurHandler,
+    clearHandler: nicknameClearHandler,
+  } = useInput(validateNicknameLength);
 
   const clearForm = () => {
     nameClearHandler();
     emailClearHandler();
     passwordClearHandler();
     confirmPasswordClearHandler();
-    nickNameClearHandler();
+    nicknameClearHandler();
   };
 
-  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // 이메일 형태 검증
+    if (!validateEmail(email)) {
+      alert("이메일이 형태가 올바르지 않습니다.");
+      return;
+    }
 
     if (password !== confirmPassword) return;
 
-    // 닉네임 중복 체크 해야됨
+    try {
+      const newUser = await axios.post(
+        `${process.env.REACT_APP_API_URL}/register`,
+        {
+          email,
+          password,
+          name,
+          nickname,
+        }
+      );
 
-    if (
-      nameHasError ||
-      emailHasError ||
-      passwordHasError ||
-      confirmPasswordHasError ||
-      nickName
-    )
-      return;
+      console.log(newUser.data);
 
-    if (
-      name.length === 0 ||
-      email.length === 0 ||
-      password.length === 0 ||
-      confirmPassword.length === 0 ||
-      nickName.length === 0
-    )
-      return;
-
-    const newUser: NewUser = {
-      name,
-      email,
-      password,
-      nickName,
-    };
-
-    console.log("NEW USER: ", newUser);
-    clearForm();
+      alert("회원가입 성공");
+      clearForm();
+      navigate("/signin"); // 회원가입 성공 후 로그인 페이지로 리다이렉트합니다.
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Axios 에러인 경우, 서버 응답에서 에러 메시지 추출
+        const serverMessage = error.response?.data.message || "로그인 실패";
+        alert(serverMessage);
+      } else {
+        // 그 외 에러 처리
+        console.error("로그인 요청 중 에러 발생", error);
+        alert("로그인 요청 중 에러 발생");
+      }
+    }
   };
 
   return (
@@ -208,14 +211,14 @@ const RegisterComponent: FC = () => {
             Your nickname
           </InputLabel>
           <TextField
-            value={nickName}
-            onChange={nickNameChangeHandler}
-            onBlur={nickNameBlurHandler}
-            error={nickNameHasError}
-            helperText={nickNameHasError ? "4 - 16 characters required" : ""}
+            value={nickname}
+            onChange={nicknameChangeHandler}
+            onBlur={nicknameBlurHandler}
+            error={nicknameHasError}
+            helperText={nicknameHasError ? "4 - 16 characters required" : ""}
             type="text"
-            name="nickName"
-            id="nickName"
+            name="nickname"
+            id="nickname"
             variant="outlined"
             size="small"
           />
