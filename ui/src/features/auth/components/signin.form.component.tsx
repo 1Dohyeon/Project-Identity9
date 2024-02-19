@@ -9,12 +9,16 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useInput from "../../../hooks/input/use.input";
 import { validateEmail } from "../../../shared/utils/validation/email";
 import { validatePasswordLength } from "../../../shared/utils/validation/length";
+import { useAuth } from "../context/authContext";
 
 const SignInComponent: FC = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const {
     text: email,
     shouldDisplayError: emailHasError,
@@ -52,15 +56,18 @@ const SignInComponent: FC = () => {
         }
       );
       console.log(response.data);
-      alert("로그인 성공");
-      // 여기서 로그인 성공 후의 로직을 처리할 수 있습니다.
+
+      const token = response.data.data.token; // 토큰 추출
+      localStorage.setItem("token", token); // 로컬 스토리지에 토큰 저장
+      login(token); // AuthContext의 상태 업데이트
+
+      clearForm();
+      navigate("/articles");
     } catch (error) {
       console.error(error);
       alert("이메일 또는 패스워드를 확인해주세요.");
       // 에러 처리
     }
-
-    clearForm();
   };
 
   return (
@@ -125,8 +132,8 @@ const SignInComponent: FC = () => {
               style={{
                 marginTop: "16px",
                 height: "31px",
-                backgroundColor: "#f0c14b",
-                color: "black",
+                backgroundColor: "#b9bba5",
+                color: "#000000",
                 borderColor: "#a88734 #9c7e31 #846a29",
                 textTransform: "none",
               }}

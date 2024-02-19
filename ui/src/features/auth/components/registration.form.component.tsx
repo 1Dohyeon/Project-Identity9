@@ -228,7 +228,7 @@ const RegisterComponent: React.FC = () => {
             style={{
               marginTop: "16px",
               height: "31px",
-              backgroundColor: "#f0c14b",
+              backgroundColor: "#d3c493",
               color: "black",
               borderColor: "#a88734 #9c7e31 #846a29",
               textTransform: "none",
