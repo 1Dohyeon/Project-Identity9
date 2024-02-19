@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Layout from "../features/auth/components/layout";
 import { useAuth } from "../features/auth/context/authContext";
+import Layout from "../features/components/layout";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();

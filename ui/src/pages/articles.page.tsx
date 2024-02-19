@@ -1,8 +1,8 @@
 import { Container, Grid } from "@mui/material";
 import React from "react";
-import ICards from "../features/auth/components/Cards/iCards";
-import Header from "../features/auth/components/header";
-import Layout from "../features/auth/components/layout";
+import ICards from "../features/components/Cards/iCards";
+import Header from "../features/components/header";
+import Layout from "../features/components/layout";
 import { ArticleData } from "../shared/models/article.interface";
 
 // 임시 게시물 데이터
@@ -78,9 +78,37 @@ const articles: ArticleData[] = [
     id: "12",
     authorId: "1",
     title:
-      "test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test ",
+      "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title ",
     mainImg: "images/layout1.png",
   },
+  {
+    id: "13",
+    authorId: "1",
+    title:
+      "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title test title, test title, test title, test title, test title, test title, test title, test title, test title, test title",
+    mainImg: "images/layout1.png",
+  },
+  {
+    id: "14",
+    authorId: "3",
+    title:
+      "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title ",
+    mainImg: "images/side6.jpg",
+  },
+  {
+    id: "15",
+    authorId: "1",
+    title:
+      "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title ",
+    mainImg: "images/layout1.png",
+  },
+  {
+    id: "16",
+    authorId: "1",
+    title: "What happened in Iceland",
+    mainImg: "images/side4.jpg",
+  },
+
   // ...
 ];
 
@@ -89,18 +117,9 @@ const ArticlesPage: React.FC = () => {
     <Layout>
       <Header />
       <Container maxWidth="lg" sx={{ pt: 13 }}>
-        <Grid
-          container
-          spacing={2}
-          justifyContent="center"
-          sx={{
-            display: "flex", // flex 레이아웃 적용
-            justifyContent: "center", // 수직 방향 가운데 정렬
-            alignItems: "center", // 수평 방향 가운데 정렬
-          }}
-        >
+        <Grid container spacing={1} justifyContent="center">
           {articles.map((article) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={article.id}>
+            <Grid item xs={12} sm={6} md={4} key={article.id}>
               <ICards article={article} />
             </Grid>
           ))}
