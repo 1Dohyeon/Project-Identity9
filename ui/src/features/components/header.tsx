@@ -14,28 +14,51 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/context/authContext";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { jwt, userNickname } = useAuth(); // 닉네임 사용
+  const { jwt, userNickname, logout } = useAuth(); // 로그아웃 함수 추가
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const location = useLocation(); // 현재 위치 가져오기
+  const pathNickname = location.pathname.split("/").pop(); // URL의 마지막 부분을 닉네임으로 가정
+  const isOwnPage = pathNickname === userNickname;
+
+  console.log(isOwnPage);
+  console.log(userNickname);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/signin"); // 로그아웃 후 로그인 페이지로 이동
+  };
 
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  const menuItems = [
-    { text: "About", onClick: () => navigate("/about") },
-    { text: "Contact Us", onClick: () => navigate("/contact") },
-    jwt
-      ? { text: "My Page", onClick: () => navigate(`/users/${userNickname}`) } // 사용자 닉네임으로 경로 업데이트
-      : { text: "Sign In", onClick: () => navigate("/signin") },
-  ];
+  const menuItems = isOwnPage
+    ? [
+        {
+          text: "My Articles",
+          onClick: () => navigate(`/users/${userNickname}/articles`),
+        },
+        { text: "System", onClick: () => console.log("System Page") },
+        { text: "Logout", onClick: handleLogout },
+      ]
+    : [
+        { text: "About", onClick: () => navigate("/about") },
+        { text: "Contact Us", onClick: () => navigate("/contact") },
+        jwt
+          ? {
+              text: "My Page",
+              onClick: () => navigate(`/users/${userNickname}`),
+            }
+          : { text: "Sign In", onClick: () => navigate("/signin") },
+      ];
 
   return (
     <AppBar

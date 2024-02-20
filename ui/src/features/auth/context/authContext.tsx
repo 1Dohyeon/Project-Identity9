@@ -1,4 +1,10 @@
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface AuthContextType {
   jwt: string | null;
@@ -22,19 +28,34 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const nickname = localStorage.getItem("userNickname");
+
+    if (token && nickname) {
+      setJwt(token);
+      setUserNickname(nickname);
+    }
+  }, []);
+
   const [jwt, setJwt] = useState<string | null>(null);
   const [userNickname, setUserNickname] = useState<string | null>(null);
 
   const login = (token: string, nickname: string) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("userNickname", nickname);
     setJwt(token);
-    setUserNickname(nickname); // 닉네임 저장
+    setUserNickname(nickname);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    setJwt(null);
-    setUserNickname(null); // 닉네임 초기화
+    const isConfirmed = window.confirm("로그아웃하겠습니까?");
+    if (isConfirmed) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userNickname");
+      setJwt(null);
+      setUserNickname(null); // 닉네임 초기화
+    }
   };
 
   return (

@@ -2,8 +2,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import UserPage from "../../../pages/user.page";
 
-interface UserProfile {
+export interface UserProfile {
   id: string;
   email: string;
   name: string;
@@ -54,15 +55,7 @@ const UserProfilePage: React.FC = () => {
   return (
     <div>
       {userProfile ? (
-        <div>
-          <h1>{userProfile.name}의 프로필</h1>
-          {/* 프로필 정보 표시 */}
-          {isOwnPage && (
-            <button onClick={() => navigate(`/edit-profile/${nickname}`)}>
-              프로필 수정
-            </button>
-          )}
-        </div>
+        <UserPage userProfile={userProfile}></UserPage>
       ) : (
         <p>프로필 정보를 불러오는 중...</p>
       )}

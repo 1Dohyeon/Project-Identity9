@@ -21,9 +21,11 @@ export class UserArticleInteractionService {
     createArticleDto: CreateArticleDto,
   ) {
     const newArticle = await this.articlesService.create(createArticleDto);
+    const articleId: string = newArticle.id;
     if (newArticle) {
       await this.usersService.plusPrivateArticle(userId);
       await this.usersService.updateAllArticles(userId);
+      await this.usersService.addArticleToUser(userId, articleId);
     }
     return newArticle;
   }
