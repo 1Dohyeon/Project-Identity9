@@ -1,12 +1,13 @@
 import { Container, Grid } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import ICards from "../features/components/Cards/iCards";
 import Header from "../features/components/header";
 import Layout from "../features/components/layout";
 import { ArticleData } from "../shared/models/article.interface";
 
 // 임시 게시물 데이터
-const articles: ArticleData[] = [
+const tempArticles: ArticleData[] = [
   // 서버로부터 받을 예정인 데이터
   {
     id: "1",
@@ -106,6 +107,44 @@ const articles: ArticleData[] = [
 ];
 
 const ArticlesPage: React.FC = () => {
+  const [articles, setArticles] = useState<ArticleData[]>(tempArticles);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}/articles`
+        );
+        const fetchedArticles = response.data.data; // 서버로부터 받은 데이터
+
+        // 서버로부터 받은 데이터를 ArticleData 형태로 변환
+        const newArticles = fetchedArticles.map((article: any) => ({
+          id: article.articleId, // 서버 데이터의 articleId를 프론트엔드 데이터의 id로 매핑
+          authorId: article.authorId, // authorId는 동일하게 유지
+          title: article.title, // title도 동일하게 유지
+          mainImg: "images/default.jpg", // 이미지 URL은 예시로 추가 (실제 경로는 적절히 조정 필요)
+        }));
+
+        // 변환된 데이터를 기존 articles 배열에 추가
+        setArticles((prevArticles) => {
+          // 기존 배열에 없는 새 기사만 추가
+          const updatedArticles = [...prevArticles];
+          newArticles.forEach((newArticle: ArticleData) => {
+            if (
+              !updatedArticles.find((article) => article.id === newArticle.id)
+            ) {
+              updatedArticles.push(newArticle);
+            }
+          });
+          return updatedArticles;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchArticles();
+  }, []);
+
   return (
     <Layout>
       <Header />
