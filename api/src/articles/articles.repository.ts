@@ -57,6 +57,17 @@ export class ArticlesRepository {
     return articles.map((article) => article.withoutDescription);
   }
 
+  async findAllPublicArticles(): Promise<Articles[]> {
+    const articles = await this.articlesModel
+      .find({ status: ArticlesStatus.PUBLIC })
+      .exec();
+    const articlesArr = [];
+    articles.forEach((e) => {
+      articlesArr.push(e.withoutDescription);
+    });
+    return articlesArr ? articlesArr : null;
+  }
+
   /**
    * 특정 article 조회
    */

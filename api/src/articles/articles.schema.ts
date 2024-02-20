@@ -37,6 +37,11 @@ export class Articles extends Document {
   @IsNotEmpty()
   title: string;
 
+  // 게시글 메인 이미지
+  @Prop()
+  @IsString()
+  mainImg: string;
+
   // 게시글 내용
   @Prop({
     required: true,
@@ -50,6 +55,7 @@ export class Articles extends Document {
     authorId: string;
     status: ArticlesStatus;
     title: string;
+    mainImg: string;
   };
 }
 
@@ -62,5 +68,6 @@ ArticlesSchema.virtual('withoutDescription').get(function (this: Articles) {
     authorId: this.authorId,
     status: this.status,
     title: this.title,
+    mainImg: this.mainImg,
   };
 });
