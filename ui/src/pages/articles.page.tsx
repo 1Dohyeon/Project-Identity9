@@ -69,12 +69,6 @@ const articles: ArticleData[] = [
     mainImg: "images/side11.jpg",
   },
   {
-    id: "11",
-    authorId: "1",
-    title: "The best place in my life",
-    mainImg: "images/side11.jpg",
-  },
-  {
     id: "12",
     authorId: "1",
     title:
@@ -82,11 +76,10 @@ const articles: ArticleData[] = [
     mainImg: "images/layout1.png",
   },
   {
-    id: "13",
-    authorId: "1",
-    title:
-      "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title test title, test title, test title, test title, test title, test title, test title, test title, test title, test title",
-    mainImg: "images/layout1.png",
+    id: "7",
+    authorId: "3",
+    title: "Christmas!! I can’t wait",
+    mainImg: "images/side7.jpg",
   },
   {
     id: "14",

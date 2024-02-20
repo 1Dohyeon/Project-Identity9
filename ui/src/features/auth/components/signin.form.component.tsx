@@ -59,7 +59,7 @@ const SignInComponent: FC = () => {
 
       const token = response.data.data.token; // 토큰 추출
       localStorage.setItem("token", token); // 로컬 스토리지에 토큰 저장
-      login(token); // AuthContext의 상태 업데이트
+      login(token, response.data.data.returnUser.nickname); // AuthContext의 상태 업데이트
 
       clearForm();
       navigate("/articles");

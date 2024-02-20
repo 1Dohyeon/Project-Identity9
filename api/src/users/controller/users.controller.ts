@@ -12,7 +12,7 @@ import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { UsersService } from '../service/users.service';
 
 // 글로벌 설정 말고 데코레이터로 각 컨트롤러마다 설정 가능
-@Controller('user')
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

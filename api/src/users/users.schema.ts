@@ -109,8 +109,6 @@ export class Users extends Document {
     name: string;
     nickname: string;
     articles: {
-      articlesId: Types.ObjectId[];
-      pageArticlesCount: number;
       publicArticlesCount: number;
       privateArticlesCount: number;
       allArticlesCount: number;

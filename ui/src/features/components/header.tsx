@@ -19,7 +19,7 @@ import { useAuth } from "../auth/context/authContext";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { jwt } = useAuth();
+  const { jwt, userNickname } = useAuth(); // 닉네임 사용
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -33,7 +33,7 @@ const Header: React.FC = () => {
     { text: "About", onClick: () => navigate("/about") },
     { text: "Contact Us", onClick: () => navigate("/contact") },
     jwt
-      ? { text: "My Page", onClick: () => navigate("/my-page") }
+      ? { text: "My Page", onClick: () => navigate(`/users/${userNickname}`) } // 사용자 닉네임으로 경로 업데이트
       : { text: "Sign In", onClick: () => navigate("/signin") },
   ];
 

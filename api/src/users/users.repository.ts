@@ -69,6 +69,7 @@ export class UsersRepository {
    */
   async getCurrentUser(nickname: string): Promise<any | null> {
     const user = await this.userModel.findOne({ nickname });
+    console.log(user);
     return user.readOnlyDataWithArticles;
   }
 

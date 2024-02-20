@@ -6,6 +6,7 @@ import HomePage from "./pages/home.page";
 import RegisterPage from "./pages/register.page";
 import SignInPage from "./pages/signin.page";
 import UserPage from "./pages/user.page";
+import UserProfilePage from "./pages/userProfile.page";
 import { theme } from "./shared/utils/theme";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/user" element={<UserPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/users/:nickname" element={<UserProfilePage />} />
           </Routes>
         </Router>
       </AuthProvider>
