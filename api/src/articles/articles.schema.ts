@@ -40,7 +40,7 @@ export class Articles extends Document {
   // 게시글 메인 이미지
   @Prop()
   @IsString()
-  mainImg: string;
+  mainImg?: string;
 
   // 게시글 내용
   @Prop({

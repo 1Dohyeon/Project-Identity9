@@ -33,7 +33,7 @@ export class ArticlesRepository {
     const article = await this.articlesModel
       .findByIdAndUpdate(articleId, updateArticleDto, { new: true })
       .exec(); // .exec() 메소드는 쿼리를 실행하고, 프로미스(Promise)를 반환하기 위해 사용됨.
-    return article.withoutDescription;
+    return article;
   }
 
   /**

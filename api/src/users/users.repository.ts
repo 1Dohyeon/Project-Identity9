@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
+import { Articles } from 'src/articles/articles.schema';
 import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { Users } from './users.schema';
@@ -151,11 +152,13 @@ export class UsersRepository {
   /**
    * user 데이터에 articleId 추가
    */
-  async addArticleToUser(userId: string, articleId: string): Promise<Users> {
+  async addArticleToUser(userId: string, newArticle: Articles): Promise<Users> {
     return this.userModel
       .findByIdAndUpdate(
         userId,
-        { $push: { articlesId: new Types.ObjectId(articleId) } },
+        {
+          $push: { publicArticles: newArticle.withoutDescription },
+        },
         { new: true },
       )
       .exec();

@@ -7,7 +7,8 @@ import {
   IsString,
   Length,
 } from 'class-validator';
-import { Document, SchemaOptions, Types } from 'mongoose';
+import { Document, SchemaOptions } from 'mongoose';
+import { Articles } from 'src/articles/articles.schema';
 
 // createdAt, updatedAt field
 const options: SchemaOptions = {
@@ -92,9 +93,9 @@ export class Users extends Document {
   allArticlesCount: number;
 
   // 사용자 게시물 id
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Article' }] })
+  @Prop()
   @IsArray()
-  articlesId: Types.ObjectId[];
+  publicArticles: Articles[];
 
   readonly readOnlyData: {
     id: string;
@@ -109,7 +110,7 @@ export class Users extends Document {
     name: string;
     nickname: string;
     articles: {
-      articlesId: Types.ObjectId[];
+      publicArticles: Articles[];
       publicArticlesCount: number;
       privateArticlesCount: number;
       allArticlesCount: number;
@@ -141,7 +142,7 @@ UserSchema.virtual('readOnlyDataWithArticles').get(function (this: Users) {
     name: this.name,
     nickname: this.nickname,
     articles: {
-      articlesId: this.articlesId,
+      publicArticles: this.publicArticles,
       pageArticlesCount: this.pageArticlesCount,
       allArticlesCount: this.allArticlesCount,
       publicArticlesCount: this.publicArticlesCount,
