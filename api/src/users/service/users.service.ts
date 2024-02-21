@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Articles } from 'src/articles/articles.schema';
-import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
+import { RegisterRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { UsersRepository } from '../users.repository';
 import { Users } from '../users.schema';
@@ -45,7 +45,7 @@ export class UsersService {
    * user 객체 생성
    * AuthService signUp calls it
    */
-  async create(user: SignupRequestDto) {
+  async create(user: RegisterRequestDto) {
     return await this.usersRepository.create(user);
   }
 
@@ -99,14 +99,47 @@ export class UsersService {
   }
 
   /**
-   * user가 만든 articleId를 그 user에게 전달
+   * user가 만든 articleId를 그 user의 publicArticles[]에 전달
    * UserArticleInteractionService createArticleForUser calls it
    */
-  async addArticleToUser(
+  async addPublicArticleToUser(
     userId: string,
-    updateArticle: Articles,
+    article: Articles,
   ): Promise<Users> {
-    return this.usersRepository.addArticleToUser(userId, updateArticle);
+    return this.usersRepository.addPublicArticleToUser(userId, article);
+  }
+
+  /**
+   * user가 만든 articleId를 그 user의 privateArticles[]에 전달
+   * UserArticleInteractionService createArticleForUser calls it
+   */
+  async addPrivateArticleToUser(
+    userId: string,
+    article: Articles,
+  ): Promise<Users> {
+    return this.usersRepository.addPrivateArticleToUser(userId, article);
+  }
+
+  /**
+   * user가 만든 article을 publicArticles[]에서 삭제
+   * UserArticleInteractionService deleteArticleForUser calls it
+   */
+  async removePublicArticleFromUser(
+    userId: string,
+    article: Articles,
+  ): Promise<Users> {
+    return this.usersRepository.removePublicArticleFromUser(userId, article);
+  }
+
+  /**
+   * user가 만든 article을 privateArticles[]에서 삭제
+   * UserArticleInteractionService deleteArticleForUser calls it
+   */
+  async removePrivateArticleFromUser(
+    userId: string,
+    article: Articles,
+  ): Promise<Users> {
+    return this.usersRepository.removePrivateArticleFromUser(userId, article);
   }
 
   /**
@@ -123,17 +156,6 @@ export class UsersService {
    */
   async minusPublicArticle(userId: string) {
     return this.usersRepository.minusPublicArticle(userId);
-  }
-
-  /**
-   * user가 만든 articleId를 그 user의 데이터에서 삭제
-   * UserArticleInteractionService deleteArticleForUser calls it
-   */
-  async removeArticleFromUser(
-    userId: string,
-    articleId: string,
-  ): Promise<Users> {
-    return this.usersRepository.removeArticleFromUser(userId, articleId);
   }
 
   /**

@@ -59,14 +59,6 @@ export class Users extends Document {
   @IsString()
   profileImgUrl: string;
 
-  // 사용자 페이지의 게시물 갯수(최대 9개)
-  @Prop({
-    required: true,
-    default: 0,
-  })
-  @IsNumber()
-  pageArticlesCount: number;
-
   // 사용자의 public 게시물 갯수(페이지에 올라갈 게시물, 따라서 최대 9개
   // but 유료버전으로 페이지에 안띄우고 공개만 해둘 수도 있음)
   @Prop({
@@ -92,28 +84,34 @@ export class Users extends Document {
   @IsNumber()
   allArticlesCount: number;
 
-  // 사용자 게시물 id
+  // 사용자 public 게시물
   @Prop()
   @IsArray()
   publicArticles: Articles[];
 
+  // 사용자 private 게시물
+  @Prop()
+  @IsArray()
+  privateArticles: Articles[];
+
   readonly readOnlyData: {
-    id: string;
+    userId: string;
     email: string;
     name: string;
     nickname: string;
   };
 
   readonly readOnlyDataWithArticles: {
-    id: string;
+    userId: string;
     email: string;
     name: string;
     nickname: string;
     articles: {
       publicArticles: Articles[];
+      privateArticles: Articles[];
+      allArticlesCount: number;
       publicArticlesCount: number;
       privateArticlesCount: number;
-      allArticlesCount: number;
     };
   };
 }
@@ -127,7 +125,7 @@ UserSchema.set('toObject', { virtuals: true });
 // user 정보만
 UserSchema.virtual('readOnlyData').get(function (this: Users) {
   return {
-    id: this.id,
+    userId: this.id,
     email: this.email,
     name: this.name,
     nickname: this.nickname,
@@ -137,13 +135,13 @@ UserSchema.virtual('readOnlyData').get(function (this: Users) {
 // user와 user의 article 관련 정보들
 UserSchema.virtual('readOnlyDataWithArticles').get(function (this: Users) {
   return {
-    id: this.id,
+    userId: this.id,
     email: this.email,
     name: this.name,
     nickname: this.nickname,
     articles: {
       publicArticles: this.publicArticles,
-      pageArticlesCount: this.pageArticlesCount,
+      privateArticles: this.privateArticles,
       allArticlesCount: this.allArticlesCount,
       publicArticlesCount: this.publicArticlesCount,
       privateArticlesCount: this.privateArticlesCount,

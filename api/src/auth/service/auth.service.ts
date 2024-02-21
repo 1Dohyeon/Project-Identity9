@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/service/users.service';
 import { LoginRequestDto } from '../dtos/login.request.dto';
-import { SignupRequestDto } from '../dtos/signup.request.dto';
+import { RegisterRequestDto } from '../dtos/signup.request.dto';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +13,7 @@ export class AuthService {
   ) {}
 
   // 회원가입
-  async signUp(body: SignupRequestDto) {
+  async signUp(body: RegisterRequestDto) {
     const { email, password, name, nickname } = body;
 
     // email 중복 확인

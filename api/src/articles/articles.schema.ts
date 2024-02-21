@@ -51,7 +51,7 @@ export class Articles extends Document {
 
   // 게시글 내용 제외한 데이터들
   readonly withoutDescription: {
-    id: string; // mongodb의 _id임
+    articleId: string; // mongodb의 _id임
     authorId: string;
     status: ArticlesStatus;
     title: string;

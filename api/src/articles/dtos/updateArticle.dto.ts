@@ -5,4 +5,5 @@ export class UpdateArticleDto extends PickType(Articles, [
   'status',
   'title',
   'description',
+  'mainImg',
 ]) {}

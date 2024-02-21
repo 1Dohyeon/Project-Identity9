@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Articles } from 'src/articles/articles.schema';
-import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
+import { RegisterRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { UpdateUserDto } from './dtos/updateUser.dto';
 import { Users } from './users.schema';
 
@@ -17,7 +17,7 @@ export class UsersRepository {
   /**
    * user 생성
    */
-  async create(user: SignupRequestDto): Promise<Users> {
+  async create(user: RegisterRequestDto): Promise<Users> {
     return await this.userModel.create(user);
   }
 
@@ -84,16 +84,16 @@ export class UsersRepository {
   /**
    * Id를 통해서 passport 정보 없는 user 객체 반환(User의 readOnlyData 활용)
    */
-  async getReadOnlyData(id: string): Promise<any | null> {
-    const user = await this.userModel.findById(id);
+  async getReadOnlyData(userId: string): Promise<any | null> {
+    const user = await this.userModel.findById(userId);
     return user.readOnlyData;
   }
 
   /**
    * user의 privateArticle 데이터 +1
    */
-  async plusPrivateArticle(id: string): Promise<any | null> {
-    const user = await this.userModel.findById(id);
+  async plusPrivateArticle(userId: string): Promise<any | null> {
+    const user = await this.userModel.findById(userId);
 
     user.privateArticlesCount += 1;
     await user.save();
@@ -104,8 +104,8 @@ export class UsersRepository {
   /**
    * user의 privateArticle 데이터 +1
    */
-  async plusPublicArticle(id: string): Promise<any | null> {
-    const user = await this.userModel.findById(id);
+  async plusPublicArticle(userId: string): Promise<any | null> {
+    const user = await this.userModel.findById(userId);
 
     user.publicArticlesCount += 1;
     await user.save();
@@ -116,8 +116,8 @@ export class UsersRepository {
   /**
    * user의 privateArticle 데이터 -1
    */
-  async minusPrivateArticle(id: string): Promise<any | null> {
-    const user = await this.userModel.findById(id);
+  async minusPrivateArticle(userId: string): Promise<any | null> {
+    const user = await this.userModel.findById(userId);
 
     user.privateArticlesCount -= 1;
     await user.save();
@@ -128,8 +128,8 @@ export class UsersRepository {
   /**
    * user의 privateArticle 데이터 -1
    */
-  async minusPublicArticle(id: string): Promise<any | null> {
-    const user = await this.userModel.findById(id);
+  async minusPublicArticle(userId: string): Promise<any | null> {
+    const user = await this.userModel.findById(userId);
 
     user.publicArticlesCount -= 1;
     await user.save();
@@ -140,8 +140,8 @@ export class UsersRepository {
   /**
    * user의 allArticles 데이터 업데이트
    */
-  async updateAllArticles(id: string) {
-    const user = await this.userModel.findById(id);
+  async updateAllArticles(userId: string) {
+    const user = await this.userModel.findById(userId);
     user.allArticlesCount =
       user.privateArticlesCount + user.publicArticlesCount;
     await user.save();
@@ -150,9 +150,12 @@ export class UsersRepository {
   }
 
   /**
-   * user 데이터에 articleId 추가
+   * user 데이터에 publicArticles[] 추가
    */
-  async addArticleToUser(userId: string, newArticle: Articles): Promise<Users> {
+  async addPublicArticleToUser(
+    userId: string,
+    newArticle: Articles,
+  ): Promise<Users> {
     return this.userModel
       .findByIdAndUpdate(
         userId,
@@ -165,16 +168,50 @@ export class UsersRepository {
   }
 
   /**
-   * user 데이터에 articleId 삭제
+   * user 데이터에 privateArticles[] 추가
    */
-  async removeArticleFromUser(
+  async addPrivateArticleToUser(
     userId: string,
-    articleId: string,
+    newArticle: Articles,
+  ): Promise<Users> {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        {
+          $push: { privateArticles: newArticle.withoutDescription },
+        },
+        { new: true },
+      )
+      .exec();
+  }
+
+  /**
+   * user 데이터의 publicArticles에서 article 삭제
+   */
+  async removePublicArticleFromUser(
+    userId: string,
+    article: Articles,
   ): Promise<Users> {
     return await this.userModel
       .findByIdAndUpdate(
         userId,
-        { $pull: { articlesId: new Types.ObjectId(articleId) } },
+        { $pull: { publicArticles: article.withoutDescription } },
+        { new: true },
+      )
+      .exec();
+  }
+
+  /**
+   * user 데이터의 privateArticles에서 article 삭제
+   */
+  async removePrivateArticleFromUser(
+    userId: string,
+    article: Articles,
+  ): Promise<Users> {
+    return await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $pull: { privateArticles: article.withoutDescription } },
         { new: true },
       )
       .exec();

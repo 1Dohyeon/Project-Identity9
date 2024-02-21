@@ -23,13 +23,16 @@ export class ArticlesRepository {
     });
     newArticle.save();
 
-    return newArticle.withoutDescription;
+    return newArticle;
   }
 
   /**
    * article 업데이트
    */
-  async update(articleId: string, updateArticleDto: UpdateArticleDto) {
+  async update(
+    articleId: string,
+    updateArticleDto: UpdateArticleDto,
+  ): Promise<Articles | null> {
     const article = await this.articlesModel
       .findByIdAndUpdate(articleId, updateArticleDto, { new: true })
       .exec(); // .exec() 메소드는 쿼리를 실행하고, 프로미스(Promise)를 반환하기 위해 사용됨.
@@ -39,12 +42,12 @@ export class ArticlesRepository {
   /**
    * article 삭제
    */
-  async delete(articleId: string) {
+  async delete(articleId: string): Promise<Articles | null> {
     const article = await this.articlesModel
       .findByIdAndDelete(articleId)
       .exec();
 
-    return article.withoutDescription;
+    return article;
   }
 
   /**
@@ -71,9 +74,9 @@ export class ArticlesRepository {
   /**
    * 특정 article 조회
    */
-  async findOne(articleId: string): Promise<any> {
+  async findOne(articleId: string): Promise<Articles> {
     const article = await this.articlesModel.findById(articleId).exec();
-    return article ? article.withoutDescription : null;
+    return article ? article : null;
   }
 
   /**

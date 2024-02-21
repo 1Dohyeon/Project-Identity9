@@ -6,4 +6,5 @@ export class CreateArticleDto extends PickType(Articles, [
   'status',
   'title',
   'description',
+  'mainImg',
 ]) {}

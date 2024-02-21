@@ -24,6 +24,7 @@ export class UserArticleInteractionService {
     if (newArticle) {
       await this.usersService.plusPrivateArticle(userId);
       await this.usersService.updateAllArticles(userId);
+      await this.usersService.addPrivateArticleToUser(userId, newArticle);
     }
     return newArticle;
   }
@@ -40,11 +41,19 @@ export class UserArticleInteractionService {
         case ArticlesStatus.PRIVATE:
           await this.usersService.minusPrivateArticle(userId);
           await this.usersService.updateAllArticles(userId);
+          await this.usersService.removePrivateArticleFromUser(
+            userId,
+            deleteArticle,
+          );
           break;
 
         case ArticlesStatus.PUBLIC:
           await this.usersService.minusPublicArticle(userId);
           await this.usersService.updateAllArticles(userId);
+          await this.usersService.removePublicArticleFromUser(
+            userId,
+            deleteArticle,
+          );
           break;
       }
     }
@@ -62,6 +71,10 @@ export class UserArticleInteractionService {
   ) {
     const user = await this.usersService.findUserById(userId);
 
+    // 데이터 삭제시 매칭을 위해서 기존 article 객체 불러옴
+    const originArticle = await this.articlesService.findOne(articleId);
+
+    // 상태 비교
     const originArticleStatus =
       await this.articlesService.findOneStatus(articleId);
 
@@ -78,17 +91,34 @@ export class UserArticleInteractionService {
         );
 
         switch (updateArticle.status) {
+          // PUBLIC -> PRIVATE
           case ArticlesStatus.PRIVATE:
             await this.usersService.plusPrivateArticle(userId);
             await this.usersService.minusPublicArticle(userId);
             await this.usersService.updateAllArticles(userId);
+            await this.usersService.removePublicArticleFromUser(
+              userId,
+              originArticle,
+            );
+            await this.usersService.addPrivateArticleToUser(
+              userId,
+              updateArticle,
+            );
             break;
 
+          // PRIVATE -> PUBLIC
           case ArticlesStatus.PUBLIC:
             await this.usersService.plusPublicArticle(userId);
             await this.usersService.minusPrivateArticle(userId);
             await this.usersService.updateAllArticles(userId);
-            await this.usersService.addArticleToUser(userId, updateArticle);
+            await this.usersService.removePrivateArticleFromUser(
+              userId,
+              originArticle,
+            );
+            await this.usersService.addPublicArticleToUser(
+              userId,
+              updateArticle,
+            );
             break;
         }
 
