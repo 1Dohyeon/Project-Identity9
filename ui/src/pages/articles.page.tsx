@@ -1,7 +1,7 @@
 import { Container, Grid } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import ICards from "../features/components/Cards/iCards";
+import CardExample from "../features/components/Cards/CardExample";
 import Header from "../features/components/header";
 import Layout from "../features/components/layout";
 import { ArticleData } from "../shared/models/article.interface";
@@ -154,7 +154,7 @@ const ArticlesPage: React.FC = () => {
         <Grid container spacing={1} justifyContent="center">
           {articles.map((article) => (
             <Grid item xs={12} sm={6} md={4} key={article.articleId}>
-              <ICards article={article} />
+              <CardExample article={article} />
             </Grid>
           ))}
         </Grid>

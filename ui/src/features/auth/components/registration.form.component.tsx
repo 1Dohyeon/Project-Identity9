@@ -92,7 +92,7 @@ const RegisterComponent: React.FC = () => {
 
       alert("회원가입 성공");
       clearForm();
-      navigate("/signin"); // 회원가입 성공 후 로그인 페이지로 리다이렉트합니다.
+      navigate("/login"); // 회원가입 성공 후 로그인 페이지로 리다이렉트합니다.
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // Axios 에러인 경우, 서버 응답에서 에러 메시지 추출
@@ -264,10 +264,10 @@ const RegisterComponent: React.FC = () => {
         <small>
           Already have an account?{" "}
           <Link
-            to="/signin"
+            to="/login"
             style={{ textDecoration: "none", color: "#0000ee" }}
           >
-            Sign-in
+            Login
           </Link>
         </small>
       </div>

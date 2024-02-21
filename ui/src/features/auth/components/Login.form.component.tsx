@@ -15,7 +15,7 @@ import { validateEmail } from "../../../shared/utils/validation/email";
 import { validatePasswordLength } from "../../../shared/utils/validation/length";
 import { useAuth } from "../context/authContext";
 
-const SignInComponent: FC = () => {
+const LoginComponent: FC = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -49,7 +49,7 @@ const SignInComponent: FC = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/signin`,
+        `${process.env.REACT_APP_API_URL}/login`,
         {
           email,
           password,
@@ -191,4 +191,4 @@ const SignInComponent: FC = () => {
   );
 };
 
-export default SignInComponent;
+export default LoginComponent;

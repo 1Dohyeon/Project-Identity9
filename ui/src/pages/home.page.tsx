@@ -63,10 +63,7 @@ const HomePage: React.FC = () => {
           {jwt ? (
             <>{renderButton("Logout", "/", true, handleLogout)}</>
           ) : (
-            <>
-              {renderButton("Sign In", "/signin")}
-              {renderButton("Register", "/register", true)}
-            </>
+            <>{renderButton("Login", "/login")}</>
           )}
           {renderButton("View Articles", "/articles")}{" "}
           {/* jwt 상태에 따라 마지막 버튼 여부 결정 */}
