@@ -1,7 +1,7 @@
 import { Container, Grid } from "@mui/material";
 import React from "react";
 import { UserProfile } from "../features/auth/models/userProfile.form";
-import ICards from "../features/components/Cards/iCards";
+import CardExample from "../features/components/Cards/CardExample";
 import Header from "../features/components/header";
 import Layout from "../features/components/layout";
 
@@ -35,7 +35,7 @@ const UserPage: React.FC<UserPageProps> = ({ userProfile }) => {
         <Grid container spacing={1} justifyContent="center">
           {publicArticles.map((article) => (
             <Grid item xs={12} sm={6} md={4} key={article.articleId}>
-              <ICards article={article} />
+              <CardExample article={article} />
             </Grid>
           ))}
         </Grid>

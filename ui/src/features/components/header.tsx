@@ -33,7 +33,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/signin"); // 로그아웃 후 로그인 페이지로 이동
+    navigate("/login"); // 로그아웃 후 로그인 페이지로 이동
   };
 
   const handleDrawerToggle = () => {
@@ -57,7 +57,7 @@ const Header: React.FC = () => {
               text: "My Page",
               onClick: () => navigate(`/users/${userNickname}`),
             }
-          : { text: "Sign In", onClick: () => navigate("/signin") },
+          : { text: "Login", onClick: () => navigate("/login") },
       ];
 
   return (

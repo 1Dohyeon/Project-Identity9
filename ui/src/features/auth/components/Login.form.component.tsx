@@ -85,7 +85,7 @@ const LoginComponent: FC = () => {
         <form onSubmit={onSubmitHandler}>
           <Grid container direction="column" justifyContent="flex-start">
             <Typography variant="h4" component="h1">
-              Sign in
+              Login
             </Typography>
 
             <InputLabel
