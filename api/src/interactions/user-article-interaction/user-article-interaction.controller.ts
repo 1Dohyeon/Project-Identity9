@@ -26,13 +26,14 @@ export class UserArticleInteractionController {
   @Post('articles')
   async createArticle(@Request() req: any) {
     const defaultArticle = {
-      authorId: req.user.id,
+      authorId: req.user.userId,
       status: ArticlesStatus.PRIVATE,
       title: 'New Article',
       description: 'Default content',
+      mainImg: './images/default.jpg',
     };
     const newArticle = this.userArticleInteractionService.createArticleForUser(
-      req.user.id,
+      req.user.userId,
       defaultArticle,
     );
 
@@ -43,14 +44,14 @@ export class UserArticleInteractionController {
    * article 객체 업데이트
    */
   @UseGuards(JwtAuthGuard)
-  @Patch('articles/:id/write')
+  @Patch('articles/:articleId/write')
   updateArticle(
     @Request() req: any,
-    @Param('id') articleId: string,
+    @Param('articleId') articleId: string,
     @Body() updateArticleDto: UpdateArticleDto,
   ) {
     return this.userArticleInteractionService.update(
-      req.user.id,
+      req.user.userId,
       articleId,
       updateArticleDto,
     );
@@ -60,20 +61,23 @@ export class UserArticleInteractionController {
    * article 객체 삭제
    */
   @UseGuards(JwtAuthGuard)
-  @Delete('articles/:id')
-  async deleteArticle(@Param('id') articleId: string, @Request() req: any) {
+  @Delete('articles/:articleId')
+  async deleteArticle(
+    @Param('articleId') articleId: string,
+    @Request() req: any,
+  ) {
     const deleteArticle =
       this.userArticleInteractionService.deleteArticleForUser(
         articleId,
-        req.user.id,
+        req.user.userId,
       );
     return deleteArticle;
   }
 
   // 계정 삭제
   @UseGuards(JwtAuthGuard)
-  @Delete('user/:id')
-  deleteUser(@Param('id') userId: string) {
+  @Delete('user/:userId')
+  deleteUser(@Param('userId') userId: string) {
     return this.userArticleInteractionService.deleteUser(userId);
   }
 }
