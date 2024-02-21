@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import UserPage from "../../../pages/user.page";
+import { ArticleData } from "../../../shared/models/article.interface";
 
 export interface UserProfile {
   id: string;
@@ -10,6 +11,7 @@ export interface UserProfile {
   name: string;
   nickname: string;
   articles: {
+    publicArticles: ArticleData[];
     publicArticlesCount: number;
     privateArticlesCount: number;
     allArticlesCount: number;

@@ -10,94 +10,94 @@ import { ArticleData } from "../shared/models/article.interface";
 const tempArticles: ArticleData[] = [
   // 서버로부터 받을 예정인 데이터
   {
-    id: "1",
+    articleId: "1",
     authorId: "1",
     title: "Top 10 travel destinations where the sunset was the prettiest",
     mainImg: "images/side1.jpg",
   },
   {
-    id: "2",
+    articleId: "2",
     authorId: "1",
     title: "Top 10 foods which the best in Europe",
     mainImg: "images/side2.jpg",
   },
   {
-    id: "3",
+    articleId: "3",
     authorId: "2",
     title: "Top 10 travel destinations where the sunrise was the prettiest",
     mainImg: "images/side3.jpg",
   },
   {
-    id: "4",
+    articleId: "4",
     authorId: "1",
     title: "What happened in Iceland",
     mainImg: "images/side4.jpg",
   },
   {
-    id: "5",
+    articleId: "5",
     authorId: "1",
     title: "The cutiest animal",
     mainImg: "images/side5.jpg",
   },
   {
-    id: "6",
+    articleId: "6",
     authorId: "3",
     title: "Top 10 mountains with the World's Most Wonderful Sceneries",
     mainImg: "images/side6.jpg",
   },
   {
-    id: "7",
+    articleId: "7",
     authorId: "3",
     title: "Christmas!! I can’t wait",
     mainImg: "images/side7.jpg",
   },
   {
-    id: "8",
+    articleId: "8",
     authorId: "1",
     title: "How to travel in night",
     mainImg: "images/side9.jpg",
   },
   {
-    id: "9",
+    articleId: "9",
     authorId: "2",
     title: "My puppy : ALEX",
     mainImg: "images/side10.jpg",
   },
   {
-    id: "10",
+    articleId: "10",
     authorId: "1",
     title: "The best place in my life",
     mainImg: "images/side11.jpg",
   },
   {
-    id: "12",
+    articleId: "12",
     authorId: "1",
     title:
       "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title ",
     mainImg: "images/layout1.png",
   },
   {
-    id: "7",
+    articleId: "7",
     authorId: "3",
     title: "Christmas!! I can’t wait",
     mainImg: "images/side7.jpg",
   },
   {
-    id: "14",
+    articleId: "14",
     authorId: "3",
     title:
       "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title ",
     mainImg: "images/side6.jpg",
   },
   {
-    id: "15",
+    articleId: "15",
     authorId: "1",
     title:
       "test title, 제목은 최대 2줄까지 작성되고 3줄부터는 잘리도록 하였음. test title, test title, test title, test title, test title, test title, test title, test title, test title, test title ",
     mainImg: "images/layout1.png",
   },
   {
-    id: "16",
+    articleId: "16",
     authorId: "1",
     title: "What happened in Iceland",
     mainImg: "images/side4.jpg",
@@ -119,7 +119,7 @@ const ArticlesPage: React.FC = () => {
 
         // 서버로부터 받은 데이터를 ArticleData 형태로 변환
         const newArticles = fetchedArticles.map((article: any) => ({
-          id: article.articleId, // 서버 데이터의 articleId를 프론트엔드 데이터의 id로 매핑
+          articleId: article.articleId, // 서버 데이터의 articleId를 프론트엔드 데이터의 id로 매핑
           authorId: article.authorId, // authorId는 동일하게 유지
           title: article.title, // title도 동일하게 유지
           mainImg: "images/default.jpg", // 이미지 URL은 예시로 추가 (실제 경로는 적절히 조정 필요)
@@ -131,7 +131,9 @@ const ArticlesPage: React.FC = () => {
           const updatedArticles = [...prevArticles];
           newArticles.forEach((newArticle: ArticleData) => {
             if (
-              !updatedArticles.find((article) => article.id === newArticle.id)
+              !updatedArticles.find(
+                (article) => article.articleId === newArticle.articleId
+              )
             ) {
               updatedArticles.push(newArticle);
             }
@@ -151,7 +153,7 @@ const ArticlesPage: React.FC = () => {
       <Container maxWidth="lg" sx={{ pt: 13 }}>
         <Grid container spacing={1} justifyContent="center">
           {articles.map((article) => (
-            <Grid item xs={12} sm={6} md={4} key={article.id}>
+            <Grid item xs={12} sm={6} md={4} key={article.articleId}>
               <ICards article={article} />
             </Grid>
           ))}
