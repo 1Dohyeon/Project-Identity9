@@ -88,6 +88,7 @@ export class UserArticleInteractionService {
             await this.usersService.plusPublicArticle(userId);
             await this.usersService.minusPrivateArticle(userId);
             await this.usersService.updateAllArticles(userId);
+            await this.usersService.addArticleToUser(userId, updateArticle);
             break;
         }
 

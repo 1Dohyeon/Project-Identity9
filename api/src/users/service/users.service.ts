@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Articles } from 'src/articles/articles.schema';
 import { SignupRequestDto } from 'src/auth/dtos/signup.request.dto';
 import { UpdateUserDto } from '../dtos/updateUser.dto';
 import { UsersRepository } from '../users.repository';
@@ -101,8 +102,11 @@ export class UsersService {
    * user가 만든 articleId를 그 user에게 전달
    * UserArticleInteractionService createArticleForUser calls it
    */
-  async addArticleToUser(userId: string, articleId: string): Promise<Users> {
-    return this.usersRepository.addArticleToUser(userId, articleId);
+  async addArticleToUser(
+    userId: string,
+    updateArticle: Articles,
+  ): Promise<Users> {
+    return this.usersRepository.addArticleToUser(userId, updateArticle);
   }
 
   /**

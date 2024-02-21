@@ -35,6 +35,7 @@ export class UserArticleInteractionController {
       req.user.id,
       defaultArticle,
     );
+
     return newArticle;
   }
 

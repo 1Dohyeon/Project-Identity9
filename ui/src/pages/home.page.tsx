@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Layout from "../features/auth/components/layout";
 import { useAuth } from "../features/auth/context/authContext";
+import Layout from "../features/components/layout";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,12 +17,8 @@ const HomePage: React.FC = () => {
 
   // 로그아웃 처리 함수
   const handleLogout = () => {
-    const isConfirmed = window.confirm("로그아웃하겠습니까?");
-    if (isConfirmed) {
-      logout(); // 로그아웃 처리
-      localStorage.removeItem("token"); // 로컬 스토리지의 토큰 제거
-      navigate("/"); // 홈으로 리다이렉트
-    }
+    logout(); // 로그아웃 처리
+    navigate("/"); // 홈으로 리다이렉트
   };
 
   // 버튼을 렌더링하는 함수

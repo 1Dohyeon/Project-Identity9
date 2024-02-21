@@ -8,7 +8,8 @@ export class ArticlesController {
   // show all articles
   @Get()
   getArticlesPage() {
-    return this.articlesService.findAll();
+    // return this.articlesService.findAll();
+    return this.articlesService.findAllPublicArticles();
   }
 
   // show (article)id's article

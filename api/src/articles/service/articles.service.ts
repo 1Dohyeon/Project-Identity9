@@ -45,10 +45,17 @@ export class ArticlesService {
 
   /**
    * 모든 article들 조회
-   * ArticlesController getArticlesPage calls it
    */
   async findAll(): Promise<Articles[]> {
     return this.articlesRepository.findAll();
+  }
+
+  /**
+   * 모든 PUBLIC article들 조회
+   * ArticlesController getArticlesPage calls it
+   */
+  async findAllPublicArticles(): Promise<Articles[]> {
+    return this.articlesRepository.findAllPublicArticles();
   }
 
   /**

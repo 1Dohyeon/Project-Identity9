@@ -71,3 +71,11 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+---
+
+## 할 일
+
+1. 글쓰기 임시 저장 기능 구현 @Post(articles/:articlesId/write/temp)
+2. 글쓰기 임시 저장 스토리지 페이지 기능 구현 @Get(users/temp-articles)
+3. 임시 저장한 글 다시 글 쓰는 페이지로 전달(데이터 그대로 -> articles/:articlesId/write)
