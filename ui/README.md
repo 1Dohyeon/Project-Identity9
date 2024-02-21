@@ -44,3 +44,19 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+---
+
+## SET UP
+
+```
+npm install axios
+```
+
+---
+
+## 할 일
+
+1. UI 개선 및 코드 정리(중복 제거 등)
+2. 글쓰기 페이지(articles/:articlesId/write) 구현
+3. 글 자세히 보기 페이지(articles/:articleId) 구현
