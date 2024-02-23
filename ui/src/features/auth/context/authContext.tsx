@@ -50,6 +50,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = () => {
     const isConfirmed = window.confirm("로그아웃하겠습니까?");
+
     if (isConfirmed) {
       localStorage.removeItem("token");
       localStorage.removeItem("userNickname");

@@ -16,6 +16,7 @@ import { useTheme } from "@mui/material/styles";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/context/authContext";
+import MyArticlesSidebar from "./MyArticlesSidebar";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -28,12 +29,15 @@ const Header: React.FC = () => {
   const pathNickname = location.pathname.split("/").pop(); // URL의 마지막 부분을 닉네임으로 가정
   const isOwnPage = pathNickname === userNickname;
 
-  console.log(isOwnPage);
-  console.log(userNickname);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleMyArticlesClick = () => {
+    // Toggle the sidebar visibility
+    setSidebarOpen(!isSidebarOpen);
+  };
 
   const handleLogout = () => {
     logout();
-    navigate("/login"); // 로그아웃 후 로그인 페이지로 이동
   };
 
   const handleDrawerToggle = () => {
@@ -44,10 +48,9 @@ const Header: React.FC = () => {
     ? [
         {
           text: "My Articles",
-          onClick: () => navigate(`/users/${userNickname}/articles`),
+          onClick: () => handleMyArticlesClick(),
         },
         { text: "System", onClick: () => console.log("System Page") },
-        { text: "Logout", onClick: handleLogout },
       ]
     : [
         { text: "About", onClick: () => navigate("/about") },
@@ -82,7 +85,12 @@ const Header: React.FC = () => {
         >
           <Typography
             variant="h6"
-            sx={{ flexGrow: 1, color: "#d3c493", cursor: "pointer" }}
+            sx={{
+              flexGrow: 1,
+              color: "#000000",
+              cursor: "pointer",
+              fontWeight: 700,
+            }}
             onClick={() => navigate("/")}
           >
             IDENTITY9
@@ -92,7 +100,7 @@ const Header: React.FC = () => {
               <IconButton
                 color="inherit"
                 onClick={handleDrawerToggle}
-                sx={{ color: "#d3c493" }}
+                sx={{ color: "#000000" }}
               >
                 <MenuIcon />
               </IconButton>
@@ -112,7 +120,7 @@ const Header: React.FC = () => {
                       <ListItem button key={index} onClick={item.onClick}>
                         <ListItemText
                           primary={item.text}
-                          sx={{ color: "#d3c493" }}
+                          sx={{ color: "#000000" }}
                         />
                       </ListItem>
                     ))}
@@ -126,13 +134,23 @@ const Header: React.FC = () => {
                 <Button
                   key={index}
                   color="inherit"
-                  sx={{ color: "#d3c493", paddingX: "10px" }}
+                  sx={{ color: "#000000", paddingX: "10px" }}
                   onClick={item.onClick}
                 >
                   {item.text}
                 </Button>
               ))}
             </Box>
+          )}
+          {isSidebarOpen && (
+            <Drawer
+              anchor="right"
+              open={isSidebarOpen}
+              onClose={() => setSidebarOpen(false)}
+            >
+              {/* Your sidebar content goes here */}
+              <MyArticlesSidebar></MyArticlesSidebar>
+            </Drawer>
           )}
         </Toolbar>
       </Box>
