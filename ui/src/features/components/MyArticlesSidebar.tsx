@@ -7,66 +7,44 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import axios from "axios"; // Axios 추가
 import React, { useState } from "react";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
-const ArticleItem = ({
-  id,
-  text,
-  index, // index 추가
-  moveArticle,
-}: {
-  id: number;
-  text: string;
-  index: number; // index 추가
-  moveArticle: (fromIndex: number, toIndex: number) => void;
-}) => {
-  const [, ref] = useDrag({
-    type: "ARTICLE",
-    item: { id, index }, // index 추가
-  });
-
-  const [, drop] = useDrop({
-    accept: "ARTICLE",
-    hover: (draggedItem: { id: number; index: number }) => {
-      if (draggedItem.id !== id) {
-        moveArticle(draggedItem.index, index);
-      }
-    },
-  });
-
-  return (
-    <ListItem
-      ref={(
-        node /// <reference path="" />
-      ) => drop(node)}
-      button
-    >
-      <ListItemText primary={text} />
-    </ListItem>
-  );
-};
 
 const MyArticlesSidebar: React.FC = () => {
   const [privateArticles, setPrivateArticles] = useState<string[]>([]);
   const [publicArticles, setPublicArticles] = useState<string[]>([]);
 
-  const handleCreateArticle = () => {
-    const newArticle = `Article ${privateArticles.length + 1}`;
-    setPrivateArticles((prevArticles) => [...prevArticles, newArticle]);
-  };
+  const handleCreateArticle = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  const moveArticle = (fromIndex: number, toIndex: number) => {
-    const articleToMove = privateArticles[fromIndex];
-    setPrivateArticles((prevArticles) =>
-      prevArticles.filter((_, index) => index !== fromIndex)
-    );
-    setPrivateArticles((prevArticles) => [
-      ...prevArticles.slice(0, toIndex),
-      articleToMove,
-      ...prevArticles.slice(toIndex),
-    ]);
+      // 서버로 POST 요청 보내기
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/articles`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 토큰을 Authorization 헤더에 추가
+          },
+        }
+      );
+
+      // 응답이 성공인 경우에만 로컬 상태 업데이트
+      if (response.status === 200) {
+        // 새로 생성된 article을 추출
+        const createdArticle = response.data.data.articles.privateArticles;
+
+        // 기존 privateArticles 상태에 새로운 article 추가
+        setPrivateArticles((prevArticles) => [...prevArticles, createdArticle]);
+        console.log(privateArticles); // 로그에 찍히는 값 확인
+      } else {
+        console.error("서버 응답이 실패하였습니다.");
+      }
+    } catch (error) {
+      console.error("서버와의 통신 중 에러가 발생하였습니다.", error);
+    }
   };
 
   return (
@@ -87,44 +65,40 @@ const MyArticlesSidebar: React.FC = () => {
               }}
             >
               <Typography variant="h6">PRIVATE</Typography>
-              <Box
+            </Box>
+            <Box
+              sx={{
+                marginTop: "5px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={handleCreateArticle}
                 sx={{
-                  marginTop: "5px",
-                  display: "flex",
-                  justifyContent: "center",
+                  border: "1px solid #cccccc",
+                  borderRadius: "10px",
+                  padding: "10px 20px",
+                  fontSize: "14px",
+                  color: "gray",
+                  "&:hover": {
+                    border: "1px solid #dddddd",
+                    backgroundColor: "#dddddd",
+                    color: "#000000",
+                  },
                 }}
               >
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={handleCreateArticle}
-                  sx={{
-                    border: "1px solid #cccccc",
-                    borderRadius: "10px", // Adjust the border radius as needed
-                    padding: "10px 20px", // Adjust the padding as needed
-                    fontSize: "14px", // Adjust the font size as needed
-                    color: "gray", // Set the text color to gray
-                    "&:hover": {
-                      border: "1px solid #dddddd", // Set the border color on hover
-                      backgroundColor: "#dddddd", // Set the background color on hover
-                      color: "#000000",
-                    },
-                  }}
-                >
-                  CREATE ARTICLE
-                </Button>
-              </Box>
+                CREATE ARTICLE
+              </Button>
             </Box>
             {/* PRIVATE ARTICLES LIST */}
             <List>
               {privateArticles.map((article, index) => (
-                <ArticleItem
-                  key={index}
-                  id={index}
-                  text={article}
-                  index={index} // index 추가
-                  moveArticle={moveArticle}
-                />
+                <ListItem key={index} button>
+                  <ListItemText primary={article} />
+                </ListItem>
               ))}
             </List>
           </Grid>

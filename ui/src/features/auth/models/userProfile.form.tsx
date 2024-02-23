@@ -12,6 +12,7 @@ export interface UserProfile {
   nickname: string;
   articles: {
     publicArticles: ArticleData[];
+    privateArticles: ArticleData[];
     publicArticlesCount: number;
     privateArticlesCount: number;
     allArticlesCount: number;
@@ -46,13 +47,6 @@ const UserProfilePage: React.FC = () => {
 
     fetchUserProfile();
   }, [nickname, navigate]);
-
-  // 데이터 접근 예시
-  useEffect(() => {
-    if (userProfile) {
-      console.log(userProfile); // 이제 'data' 접근이 필요 없음
-    }
-  }, [userProfile]);
 
   return (
     <div>
