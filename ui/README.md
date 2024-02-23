@@ -57,6 +57,7 @@ npm install axios
 
 ## 할 일
 
-1. UI 개선 및 코드 정리(중복 제거 등)
+1. 글 자세히 보기 페이지(articles/:articleId) 구현
 2. 글쓰기 페이지(articles/:articlesId/write) 구현
-3. 글 자세히 보기 페이지(articles/:articleId) 구현
+3. CREATE ARTICLE을 누르면 데이터베이스 저장은 됨. -> 이 저장된 ARTICLE들을 MY ARTICLES에 표시
+4. UI 개선 및 코드 정리(중복 제거 등)

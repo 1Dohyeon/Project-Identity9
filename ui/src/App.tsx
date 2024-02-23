@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { AuthProvider } from "./features/auth/context/authContext";
 import UserProfilePage from "./features/auth/models/userProfile.form";
 import LoginPage from "./pages/Login.page";
+import ArticleDetail from "./pages/articleDetail";
 import ArticlesPage from "./pages/articles.page";
 import HomePage from "./pages/home.page";
 import RegisterPage from "./pages/register.page";
@@ -14,6 +15,7 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
+            <Route path="/articles/:articleId" element={<ArticleDetail />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/login" element={<LoginPage />} />
